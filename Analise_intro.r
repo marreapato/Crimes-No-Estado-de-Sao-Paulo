@@ -1,15 +1,30 @@
 #install.packages("tidyverse")
 #install.packages("ggthemes")
 #install.packages("readxl")
+#install.packages("maptools")
+#install.packages("sf")
+#install.packages("plotly")
+#install.packages("tmap")
+library(tmap)
+library(plotly)
 library(tidyverse)
 library(ggthemes)
 library(readxl)
+library(rgdal)
+library(maptools)
+library(sf)
+
+cidades <- rgdal::readOGR("35MUE250GC_SIR.shp")
+
+
+#brmaps r
 
 anual_sp <- data.frame(read_xlsx("Anual-Estado-SP.xlsx"))
 #FRV = Furto e Roubo de Veiculos
 anual_sp <- anual_sp[,-6]
 
 spdata<- read_csv("ds_SSP_PolicyProductivity_SP-BR_utf8_2001-2020_rev3.csv")
+
 
 dsp <- read_csv("ds_SSP_MonthlyOccurences_SP-BR_utf8_2001-2020_rev3.csv")
 
@@ -33,5 +48,20 @@ as
 
 ds_Sp<- read_csv("ds_SSP_PolicyProductivity_SP-BR_utf8_2001-2020_rev3.csv")
 
+#later
+names(sp19)[names(sp19) == "Cidade"] <- "NM_MUNICIP"
+sp19$NM_MUNICIP <- toupper(sp19$NM_MUNICIP)
 
+sp_city<-merge(cidades,sp19,by="NM_MUNICIP")
+sp_city$NM_MUNICIP<-factor(sp_city$NM_MUNICIP)
+sp_city <- sp_city[order(sp_city$`Homicídio Doloso por 100 mil habitantes`),] # order the data [very important!]
+
+
+vcolor=c("#FFFFFF","#00FFF3","#0FBE09","#003AFF","red")
+i_vcolor=c("red","#003AFF","#0FBE09","#00FFF3","#FFFFFF")
+
+
+plot(sp_city,col=sp_city$`Homicídio Doloso por 100 mil habitantes`)
+legend("topleft", inset=.05,lty=c(1,1), text.col=seq_along(sp_city$`Homicídio Doloso por 100 mil habitantes`),legend=sp_city$`Homicídio Doloso por 100 mil habitantes`, col=sp_city$`Homicídio Doloso por 100 mil habitantes`)
+?plot
 
