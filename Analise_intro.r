@@ -5,6 +5,8 @@
 #install.packages("sf")
 #install.packages("plotly")
 #install.packages("tmap")
+#install.packages("geobr")
+library(geobr)
 library(tmap)
 library(plotly)
 library(tidyverse)
@@ -13,25 +15,22 @@ library(readxl)
 library(rgdal)
 library(maptools)
 library(sf)
+#geobr https://cran.r-project.org/web/packages/geobr/vignettes/intro_to_geobr.html
 #shps2020 pegos no portal:https://www.ibge.gov.br/geociencias/organizacao-do-territorio/15774-malhas.html?=&t=downloads
+#mesorregiões e municipios
+#lista: https://pt.wikipedia.org/wiki/Lista_de_mesorregi%C3%B5es_e_microrregi%C3%B5es_de_S%C3%A3o_Paulo#Mesorregi%C3%A3o_Macro_Metropolitana_Paulista
+
 meso <- rgdal::readOGR("SP_Mesorregioes_2020.shp")#mesorregioes
 micro <- rgdal::readOGR("SP_Microrregioes_2020.shp")
 
 muni <- rgdal::readOGR("SP_Municipios_2020.shp")
-
-
 #brmaps r
+#geobr
+datasets <- list_geobr()
 
-anual_sp <- data.frame(read_xlsx("Anual-Estado-SP.xlsx"))
-#FRV = Furto e Roubo de Veiculos
-anual_sp <- anual_sp[,-6]
+print(datasets, n=21)
+muni <- read_municipality(code_muni= "SP", year=2007)
 
-spdata<- read_csv("ds_SSP_PolicyProductivity_SP-BR_utf8_2001-2020_rev3.csv")
-
-
-dsp <- read_csv("ds_SSP_MonthlyOccurences_SP-BR_utf8_2001-2020_rev3.csv")
-
-spdata==dsp
 
 ###################################
 #analisarei a crime_rate
@@ -51,6 +50,20 @@ as=ggplot(data = sp19, mapping = aes(x = as.character(sp19$Regiao), y =as.numeri
   labs(title="Homicídio Doloso por 100 mil habitantes no estado de SP em 2019 (por região).",x="Região",y="Homicídios")+theme_few()+ylim(min = 0, max = max(as.numeric(sp$`Homicídio Doloso por 100 mil habitantes`)))
 as
 
+# join the databases
+muni_sp <- dplyr::left_join(muni, sp19, by = c("name_muni" = "Cidade"))
+
+# plot dos municípios de sp
+ggplot() +
+  geom_sf(data=muni_sp, fill="#2D3E50", color="#FEBF57", size=.15, show.legend = FALSE) +
+  labs(subtitle="Municipalidades de SP, 2007", size=8) +
+  theme_minimal() 
+
+# plot dos municípios de sp
+ggplot() +
+  geom_sf(data=muni_sp, fill=muni_sp$`Homicídio Doloso por 100 mil habitantes`, color="Black", size=.15, show.legend = FALSE) +
+  labs(subtitle="Municipalidades de SP, 2007", size=8) +
+  theme_minimal() 
 #ds_Sp<- read_csv("ds_SSP_PolicyProductivity_SP-BR_utf8_2001-2020_rev3.csv")
 
 #later
@@ -65,16 +78,11 @@ sp_city <- sp_city[order(sp_city$`Homicídio Doloso por 100 mil habitantes`),] #
 vcolor=c("#FFFFFF","#00FFF3","#0FBE09","#003AFF","red")
 i_vcolor=c("red","#003AFF","#0FBE09","#00FFF3","#FFFFFF")
 
-ggplot(data = sp_city) +
-  geom_sf(aes(fill = sp_city$`Homicídio Doloso por 100 mil habitantes`)) +
-  scale_fill_gradientn(colors=vcolor)+
-  theme(legend.position = "right",axis.ticks.x=element_blank(), axis.text.x=element_blank(),panel.background = element_rect(fill = "white"),
-        panel.border = element_rect(fill = NA))+labs(title ="Até Fevereiro",fill="Taxa de Homicídios: ",caption=c("Fonte: Covid19DataHub"))
-                                                     
+sp_city$NM_MUN <- as.factor(sp_city$NM_MUN)
+levels(sp_city$NM_MUN)
+
 plot(sp_city,col=sp_city$`Homicídio Doloso por 100 mil habitantes`)
 legend("topleft", inset=.05,lty=c(1,1), text.col=seq_along(sp_city$`Homicídio Doloso por 100 mil habitantes`),legend=sp_city$`Homicídio Doloso por 100 mil habitantes`, col=sp_city$`Homicídio Doloso por 100 mil habitantes`)
 ?plot
 
-#mesorregiões
-#lista: https://pt.wikipedia.org/wiki/Lista_de_mesorregi%C3%B5es_e_microrregi%C3%B5es_de_S%C3%A3o_Paulo#Mesorregi%C3%A3o_Macro_Metropolitana_Paulista
 #krigagem // kriging
