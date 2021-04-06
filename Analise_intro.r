@@ -65,9 +65,16 @@ sp_city <- sp_city[order(sp_city$`Homicídio Doloso por 100 mil habitantes`),] #
 vcolor=c("#FFFFFF","#00FFF3","#0FBE09","#003AFF","red")
 i_vcolor=c("red","#003AFF","#0FBE09","#00FFF3","#FFFFFF")
 
-
+ggplot(data = sp_city) +
+  geom_sf(aes(fill = sp_city$`Homicídio Doloso por 100 mil habitantes`)) +
+  scale_fill_gradientn(colors=vcolor)+
+  theme(legend.position = "right",axis.ticks.x=element_blank(), axis.text.x=element_blank(),panel.background = element_rect(fill = "white"),
+        panel.border = element_rect(fill = NA))+labs(title ="Até Fevereiro",fill="Taxa de Homicídios: ",caption=c("Fonte: Covid19DataHub"))
+                                                     
 plot(sp_city,col=sp_city$`Homicídio Doloso por 100 mil habitantes`)
 legend("topleft", inset=.05,lty=c(1,1), text.col=seq_along(sp_city$`Homicídio Doloso por 100 mil habitantes`),legend=sp_city$`Homicídio Doloso por 100 mil habitantes`, col=sp_city$`Homicídio Doloso por 100 mil habitantes`)
 ?plot
 
-#krigagem
+#mesorregiões
+#lista: https://pt.wikipedia.org/wiki/Lista_de_mesorregi%C3%B5es_e_microrregi%C3%B5es_de_S%C3%A3o_Paulo#Mesorregi%C3%A3o_Macro_Metropolitana_Paulista
+#krigagem // kriging
