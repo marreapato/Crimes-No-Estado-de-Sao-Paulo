@@ -6,6 +6,10 @@
 #install.packages("plotly")
 #install.packages("tmap")
 #install.packages("geobr")
+#install.packages("spdep")
+#install.packages("sf")
+library(sf)
+library(spdep)
 library(geobr)
 library(tmap)
 library(plotly)
@@ -14,17 +18,16 @@ library(ggthemes)
 library(readxl)
 library(rgdal)
 library(maptools)
-library(sf)
 #geobr https://cran.r-project.org/web/packages/geobr/vignettes/intro_to_geobr.html
 #shps2020 pegos no portal:https://www.ibge.gov.br/geociencias/organizacao-do-territorio/15774-malhas.html?=&t=downloads
 #mesorregiões e municipios
 #lista: https://pt.wikipedia.org/wiki/Lista_de_mesorregi%C3%B5es_e_microrregi%C3%B5es_de_S%C3%A3o_Paulo#Mesorregi%C3%A3o_Macro_Metropolitana_Paulista
 
+#shps
 meso <- rgdal::readOGR("SP_Mesorregioes_2020.shp")#mesorregioes
 micro <- rgdal::readOGR("SP_Microrregioes_2020.shp")
-
 munis <- rgdal::readOGR("SP_Municipios_2020.shp")
-#brmaps r
+
 #geobr
 datasets <- list_geobr()
 
@@ -106,7 +109,43 @@ ggplot() +
   labs(subtitle="Municipalidades de SP", size=8,fill="Mortes por 100 mil") +
   theme_minimal()+theme(legend.position = "right") 
 
+#sf to sp
+mesos_sp_sp <- as(mesos_sp,Class = "Spatial")
 
+#moran
+coor <- coordinates(mesos_sp_sp)
+
+cartePPV3.knn <- knearneigh(coor, k=2) #2 neighbours
+cartePPV3.nb <- knn2nb(cartePPV3.knn,row.names = mesos_sp_sp$name_intermediate)
+PPV3.w <- nb2listw(cartePPV3.nb, style = "W", zero.policy = TRUE)#norm by row
+
+plot(mesos_sp_sp, col='gray', border='blue', lwd=2,main= "Vizinhos")
+plot(PPV3.w, coordinates(mesos_sp_sp), col='red', lwd=2, add=TRUE)#links
+#lots of variables missing
+
+#monthly
+#death_pop
+moran.plot(mesos_sp_sp$soma_homi_100mil, PPV3.w, zero.policy=TRUE)
+moran.test(mesos_sp_sp$soma_homi_100mil,PPV3.w,zero.policy = TRUE,na.action = na.omit)
+moran.mc(nsim=10000,mesos_sp_sp$soma_homi_100mil,PPV3.w,zero.policy = TRUE,na.action = na.omit)
+
+#monthly death pop local
+local.mi.prod<-localmoran(mesos_sp_sp$soma_homi_100mil, PPV3.w)
+
+mesos_sp_sp$lmi<-local.mi.prod[,1]
+
+mesos_sp_sp$lmi.p<-local.mi.prod[,5]
+
+mesos_sp_sp$lmi.p.sig<-as.factor(ifelse(local.mi.prod[,5]<.001,"Sig p<.001",
+                                           ifelse(local.mi.prod[,5]<.05,"Sig p<.05", "NS" )))
+
+#require("RColorBrewer")
+
+#require("sp")
+
+spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), main = "Homicidios",colorkey=FALSE)
+
+#validated
 ###########################################################################################
 #FAZENDO COM OS SHPS
 names(sp19)[names(sp19) == "Cidade"] <- "NM_MUN"
