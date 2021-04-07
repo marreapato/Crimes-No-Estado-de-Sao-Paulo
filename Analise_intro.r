@@ -52,17 +52,13 @@ as=ggplot(data = sp19, mapping = aes(x = as.character(sp19$Regiao), y =as.numeri
   labs(title="Homicídio Doloso por 100 mil habitantes no estado de SP em 2019 (por região).",x="Região",y="Homicídios")+theme_few()+ylim(min = 0, max = max(as.numeric(sp$`Homicídio Doloso por 100 mil habitantes`)))
 as
 
-
+#Municipios
 #juntando databases
 # join the databases
 sp19$Cidade
 muni$name_muni
 
 muni_sp <- dplyr::left_join(muni, sp19, by = c("name_muni" = "Cidade"))
-
-
-
-
 
 # plot dos municípios de sp
 ggplot() +
@@ -79,7 +75,8 @@ ggplot() +
 
 #ds_Sp<- read_csv("ds_SSP_PolicyProductivity_SP-BR_utf8_2001-2020_rev3.csv")
 
-#later
+###########################################################################################
+#FAZENDO COM OS SHPS
 names(sp19)[names(sp19) == "Cidade"] <- "NM_MUN"
 #sp19$NM_MUNICIP <- toupper(sp19$NM_MUNICIP)
 
@@ -97,6 +94,6 @@ levels(sp_city$NM_MUN)
 plot(sp_city,col=sp_city$`Homicídio Doloso por 100 mil habitantes`)
 legend("topleft", inset=.05,lty=c(1,1), text.col=seq_along(sp_city$`Homicídio Doloso por 100 mil habitantes`),legend=sp_city$`Homicídio Doloso por 100 mil habitantes`, col=sp_city$`Homicídio Doloso por 100 mil habitantes`)
 ?plot
-
+#################################################################################
 
 #krigagem // kriging
