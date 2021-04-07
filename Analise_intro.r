@@ -29,7 +29,7 @@ munis <- rgdal::readOGR("SP_Municipios_2020.shp")
 datasets <- list_geobr()
 
 print(datasets, n=21)
-muni <- read_municipality(code_muni= "SP", year=2007)
+muni <- read_municipality(code_muni= "SP", year=2019)
 
 
 ###################################
@@ -52,8 +52,17 @@ as=ggplot(data = sp19, mapping = aes(x = as.character(sp19$Regiao), y =as.numeri
   labs(title="Homicídio Doloso por 100 mil habitantes no estado de SP em 2019 (por região).",x="Região",y="Homicídios")+theme_few()+ylim(min = 0, max = max(as.numeric(sp$`Homicídio Doloso por 100 mil habitantes`)))
 as
 
+
+#juntando databases
 # join the databases
+sp19$Cidade
+muni$name_muni
+
 muni_sp <- dplyr::left_join(muni, sp19, by = c("name_muni" = "Cidade"))
+
+
+
+
 
 # plot dos municípios de sp
 ggplot() +
@@ -65,7 +74,7 @@ ggplot() +
 ggplot() +
   geom_sf(data=muni_sp,aes(fill=as.numeric(as.character(muni_sp$`Homicídio Doloso por 100 mil habitantes`))), color="Black", size=.15) +
   scale_fill_continuous()+
-  labs(subtitle="Municipalidades de SP, 2007", size=8,fill="Mortes por 100 mil") +
+  labs(subtitle="Municipalidades de SP", size=8,fill="Mortes por 100 mil") +
   theme_minimal()+theme(legend.position = "right") 
 
 #ds_Sp<- read_csv("ds_SSP_PolicyProductivity_SP-BR_utf8_2001-2020_rev3.csv")
@@ -88,5 +97,6 @@ levels(sp_city$NM_MUN)
 plot(sp_city,col=sp_city$`Homicídio Doloso por 100 mil habitantes`)
 legend("topleft", inset=.05,lty=c(1,1), text.col=seq_along(sp_city$`Homicídio Doloso por 100 mil habitantes`),legend=sp_city$`Homicídio Doloso por 100 mil habitantes`, col=sp_city$`Homicídio Doloso por 100 mil habitantes`)
 ?plot
+
 
 #krigagem // kriging
