@@ -23,7 +23,7 @@ library(sf)
 meso <- rgdal::readOGR("SP_Mesorregioes_2020.shp")#mesorregioes
 micro <- rgdal::readOGR("SP_Microrregioes_2020.shp")
 
-muni <- rgdal::readOGR("SP_Municipios_2020.shp")
+munis <- rgdal::readOGR("SP_Municipios_2020.shp")
 #brmaps r
 #geobr
 datasets <- list_geobr()
@@ -72,7 +72,7 @@ ggplot() +
 names(sp19)[names(sp19) == "Cidade"] <- "NM_MUN"
 #sp19$NM_MUNICIP <- toupper(sp19$NM_MUNICIP)
 
-sp_city<-merge(muni,sp19,by="NM_MUN")
+sp_city<-merge(munis,sp19,by="NM_MUN")
 sp_city$NM_MUN<-factor(sp_city$NM_MUN)
 sp_city <- sp_city[order(sp_city$`Homicídio Doloso por 100 mil habitantes`),] # order the data [very important!]
 
