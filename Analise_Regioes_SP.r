@@ -125,6 +125,7 @@ plot(PPV3.w, coordinates(mesos_sp_sp), col='red', lwd=2, add=TRUE)#links
 #lots of variables missing
 mesos_sp_sp$soma_homi_100mil <- log(mesos_sp_sp$soma_homi_100mil)
 mesos_sp_sp$soma_homi_100mil <- exp(mesos_sp_sp$soma_homi_100mil)
+#mesos_sp_sp$soma_homi_100mil <- (mesos_sp_sp$soma_homi_100mil-min(mesos_sp_sp$soma_homi_100mil))/(max(mesos_sp_sp$soma_homi_100mil)-min(mesos_sp_sp$soma_homi_100mil))
 
 #monthly
 #death_pop
