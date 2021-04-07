@@ -57,6 +57,7 @@ as
 # join the databases
 sp19$Cidade
 muni$name_muni
+?read_intermediate_region()
 
 muni_sp <- dplyr::left_join(muni, sp19, by = c("name_muni" = "Cidade"))
 
@@ -74,6 +75,37 @@ ggplot() +
   theme_minimal()+theme(legend.position = "right") 
 
 #ds_Sp<- read_csv("ds_SSP_PolicyProductivity_SP-BR_utf8_2001-2020_rev3.csv")
+
+########################################
+
+#Mesorregioes
+mesos <- read_intermediate_region(code_intermediate = "SP",year=2019)
+mesos$name_intermediate
+table(sp19$Regiao)
+
+sp19$Regiao[sp19$Regiao=="Capital"]="São Paulo"  
+sp19$Regiao[sp19$Regiao=="Santos"]="São Paulo"  
+sp19$Regiao[sp19$Regiao=="Piracicaba"]="Araraquara"
+sp19$Regiao[sp19$Regiao=="Grande São Paulo (exclui a Capital)"]="São Paulo" 
+
+df=as.data.frame(table(sp19$Regiao))#igual
+df$Var1
+
+soma_homi_100mil <- aggregate(as.numeric(sp19$`Homicídio Doloso por 100 mil habitantes`),by=list(sp19$Regiao),sum)
+df$soma_homi_100mil <- soma_homi_100mil$x
+
+mesos_sp <- dplyr::left_join(mesos, df, by = c("name_intermediate" = "Var1"))
+
+#Posso olhar krigagem para isso
+mesos_sp$soma_homi_100mil[is.na(mesos_sp$soma_homi_100mil)] <- mean(mesos_sp$soma_homi_100mil,na.rm = T)
+mesos_sp$soma_homi_100mil
+
+ggplot() +
+  geom_sf(data=mesos_sp,aes(fill=as.numeric(as.character(mesos_sp$soma_homi_100mil))), color="Black", size=.15) +
+  scale_fill_continuous()+
+  labs(subtitle="Municipalidades de SP", size=8,fill="Mortes por 100 mil") +
+  theme_minimal()+theme(legend.position = "right") 
+
 
 ###########################################################################################
 #FAZENDO COM OS SHPS
