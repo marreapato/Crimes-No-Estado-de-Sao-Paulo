@@ -99,7 +99,8 @@ df$soma_homi_100mil <- soma_homi_100mil$x
 
 mesos_sp <- dplyr::left_join(mesos, df, by = c("name_intermediate" = "Var1"))
 
-#Posso olhar krigagem para isso
+#Posso olhar krigagem para isso, nos muncipios
+#e https://www.r-bloggers.com/2016/04/missing-value-treatment/
 mesos_sp$soma_homi_100mil[is.na(mesos_sp$soma_homi_100mil)] <- mean(mesos_sp$soma_homi_100mil,na.rm = T)
 mesos_sp$soma_homi_100mil
 
