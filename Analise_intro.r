@@ -37,6 +37,8 @@ muni <- read_municipality(code_muni= "SP", year=2007)
 sp <- read_csv("ds_SSP_CrimeRate_SP-BR_utf8_2001-2019.csv",na = c("-", "None"),)
 ?read_csv
 head(sp)
+
+#Tratamento
 sp <- na.omit(sp)
 
 sp$`Homicídio Doloso por 100 mil habitantes` <- gsub(",", ".", sp$`Homicídio Doloso por 100 mil habitantes`)
@@ -61,7 +63,7 @@ ggplot() +
 
 # plot dos municípios de sp
 ggplot() +
-  geom_sf(data=muni_sp, fill=muni_sp$`Homicídio Doloso por 100 mil habitantes`, color="Black", size=.15, show.legend = FALSE) +
+  geom_sf(data=muni_sp, fill=muni_sp$`Homicídio Doloso por 100 mil habitantes`, color="Black", size=.15) +
   labs(subtitle="Municipalidades de SP, 2007", size=8) +
   theme_minimal() 
 #ds_Sp<- read_csv("ds_SSP_PolicyProductivity_SP-BR_utf8_2001-2020_rev3.csv")
