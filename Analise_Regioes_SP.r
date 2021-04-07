@@ -123,6 +123,8 @@ PPV3.w <- nb2listw(cartePPV3.nb, style = "W", zero.policy = TRUE)#norm by row
 plot(mesos_sp_sp, col='gray', border='blue', lwd=2,main= "Vizinhos")
 plot(PPV3.w, coordinates(mesos_sp_sp), col='red', lwd=2, add=TRUE)#links
 #lots of variables missing
+mesos_sp_sp$soma_homi_100mil <- log(mesos_sp_sp$soma_homi_100mil)
+mesos_sp_sp$soma_homi_100mil <- exp(mesos_sp_sp$soma_homi_100mil)
 
 #monthly
 #death_pop
