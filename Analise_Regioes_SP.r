@@ -176,7 +176,7 @@ mesos_sp_sp$quad <- quadrant
 
 ( aug <- ggplot(data = mesos_sp) +
     geom_sf(aes(fill = mesos_sp_sp$quad)) +
-    scale_fill_manual(values=c("red","pink","#ADD8E6","blue"))+theme(legend.position ="bottom",legend.title=element_text(size=14),legend.text=element_text(size=15),legend.direction = "horizontal",
+    scale_fill_manual(values=c("red","#ADD8E6","blue"))+theme(legend.position ="bottom",legend.title=element_text(size=14),legend.text=element_text(size=15),legend.direction = "horizontal",
                                                                      axis.ticks.x=element_blank(), axis.text.x=element_blank())+
     labs(title = "Homicidios por 100 mil em 2019",fill="Cluster"))
 
