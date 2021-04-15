@@ -81,7 +81,7 @@ ggplot() +
 
 ########################################
 
-#Mesorregioes
+#Mesorregioes#geo_br
 mesos <- read_intermediate_region(code_intermediate = "SP",year=2019)
 mesos$name_intermediate
 table(sp19$Regiao)
@@ -141,7 +141,7 @@ mesos_sp_sp$lmi<-local.mi.prod[,1]
 mesos_sp_sp$lmi.p<-local.mi.prod[,5]
 
 mesos_sp_sp$lmi.p.sig<-as.factor(ifelse(local.mi.prod[,5]<.001,"Sig p<.001",
-                                           ifelse(local.mi.prod[,5]<.05,"Sig p<.05", "NS" )))
+                                        ifelse(local.mi.prod[,5]<.05,"Sig p<.05", "NS" )))
 
 #require("RColorBrewer")
 
@@ -150,6 +150,36 @@ mesos_sp_sp$lmi.p.sig<-as.factor(ifelse(local.mi.prod[,5]<.001,"Sig p<.001",
 spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), main = "Homicidios")
 
 #validated
+
+#boxmap
+quadrant <- vector(mode="numeric",length=nrow(local.mi.prod))
+
+# centers the variable of interest around its mean
+m.qualification <-mesos_sp_sp$soma_homi_100mil- mean(mesos_sp_sp$soma_homi_100mil)     
+
+# centers the local Moran's around the mean
+m.local <- local.mi.prod[,1] - mean(local.mi.prod[,1])    
+
+# significance threshold
+signif <- 0.05 
+
+# builds a data quadrant
+#positions
+quadrant[m.qualification >0 & m.local>0] <- "HH"#AA  
+quadrant[m.qualification <0 & m.local<0] <- "LL"#BB1      
+quadrant[m.qualification <0 & m.local>0] <- "LH"#BA2
+quadrant[m.qualification >0 & m.local<0] <- "HL"#AB3
+#quadrant[local.mi.prod[,5]>signif] <- 0#you can choose not to run it
+mesos_sp_sp$quad <- quadrant
+# plot in r
+#may
+
+( aug <- ggplot(data = mesos_sp) +
+    geom_sf(aes(fill = mesos_sp_sp$quad)) +
+    scale_fill_manual(values=c("red","pink","#ADD8E6","blue"))+theme(legend.position ="bottom",legend.title=element_text(size=14),legend.text=element_text(size=15),legend.direction = "horizontal",
+                                                                     axis.ticks.x=element_blank(), axis.text.x=element_blank())+
+    labs(title = "Homicidios por 100 mil em 2019",fill="Cluster"))
+
 ###########################################################################################
 #FAZENDO COM OS SHPS
 names(sp19)[names(sp19) == "Cidade"] <- "NM_MUN"
