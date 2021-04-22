@@ -23,11 +23,6 @@ library(maptools)
 #mesorregiões e municipios
 #lista: https://pt.wikipedia.org/wiki/Lista_de_mesorregi%C3%B5es_e_microrregi%C3%B5es_de_S%C3%A3o_Paulo#Mesorregi%C3%A3o_Macro_Metropolitana_Paulista
 
-#shps
-meso <- rgdal::readOGR("SP_Mesorregioes_2020.shp")#mesorregioes
-micro <- rgdal::readOGR("SP_Microrregioes_2020.shp")
-munis <- rgdal::readOGR("SP_Municipios_2020.shp")
-
 #geobr
 datasets <- list_geobr()
 
@@ -43,6 +38,13 @@ head(sp)
 
 #Tratamento
 sp <- na.omit(sp)
+
+sp$`Furto por 100 mil habitantes`[sp$`Furto por 100 mil habitantes`>10000] <- sp$`Furto por 100 mil habitantes`[sp$`Furto por 100 mil habitantes`>10000]/10000
+sp$`Roubo por 100 mil habitantes`[sp$`Roubo por 100 mil habitantes`>10000] <- sp$`Roubo por 100 mil habitantes`[sp$`Roubo por 100 mil habitantes`>10000]/10000
+sp$`Furto e Roubo de Veículo por 100 mil habitantes`[sp$`Furto e Roubo de Veículo por 100 mil habitantes`>10000] <- sp$`Furto e Roubo de Veículo por 100 mil habitantes`[sp$`Furto e Roubo de Veículo por 100 mil habitantes`>10000]/10000
+sp$`Furto por 100 mil veículos`[sp$`Furto por 100 mil veículos`>10000] <- sp$`Furto por 100 mil veículos`[sp$`Furto por 100 mil veículos`>10000]/10000
+sp$`Roubo por 100 mil veículos`[sp$`Roubo por 100 mil veículos`>10000] <- sp$`Roubo por 100 mil veículos`[sp$`Roubo por 100 mil veículos`>10000]/10000
+
 
 sp$`Homicídio Doloso por 100 mil habitantes` <- gsub(",", ".", sp$`Homicídio Doloso por 100 mil habitantes`)
 #sp$`Homicídio Doloso por 100 mil habitantes` <- gsub("None", NA, sp$`Homicídio Doloso por 100 mil habitantes`)
@@ -177,7 +179,7 @@ mesos_sp_sp$quad <- quadrant
 ( aug <- ggplot(data = mesos_sp) +
     geom_sf(aes(fill = mesos_sp_sp$quad)) +
     scale_fill_manual(values=c("red","#ADD8E6","blue"))+theme(legend.position ="bottom",legend.title=element_text(size=14),legend.text=element_text(size=15),legend.direction = "horizontal",
-                                                                     axis.ticks.x=element_blank(), axis.text.x=element_blank())+
+                                                              axis.ticks.x=element_blank(), axis.text.x=element_blank())+
     labs(title = "Homicidios por 100 mil em 2019",fill="Cluster"))
 
 ###########################################################################################
