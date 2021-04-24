@@ -8,6 +8,9 @@
 #install.packages("geobr")
 #install.packages("spdep")
 #install.packages("sf")
+#install.packages("crul")
+#install.packages("rgdal")
+library(crul)
 library(sf)
 library(spdep)
 library(geobr)
@@ -19,67 +22,38 @@ library(readxl)
 library(rgdal)
 library(maptools)
 #geobr https://cran.r-project.org/web/packages/geobr/vignettes/intro_to_geobr.html
-#shps2020 pegos no portal:https://www.ibge.gov.br/geociencias/organizacao-do-territorio/15774-malhas.html?=&t=downloads
-#mesorregiões e municipios
-#lista: https://pt.wikipedia.org/wiki/Lista_de_mesorregi%C3%B5es_e_microrregi%C3%B5es_de_S%C3%A3o_Paulo#Mesorregi%C3%A3o_Macro_Metropolitana_Paulista
 
 #geobr
 datasets <- list_geobr()
 
 print(datasets, n=21)
-muni <- read_municipality(code_muni= "SP", year=2019)
-
-
 ###################################
 #analisarei a crime_rate
-sp <- read_csv("ds_SSP_CrimeRate_SP-BR_utf8_2001-2019.csv",na = c("-", "None"),)
-?read_csv
+sp <- read.csv2("https://raw.githubusercontent.com/marreapato/Crimes-No-Estado-de-Sao-Paulo/main/ds_SSP_CrimeRate_SP-BR_utf8_2001-2019.csv",sep = ",")
+
 head(sp)
 
-#Tratamento
-sp <- na.omit(sp)
+#commas to dot
+for(i in 2:8){
+sp[,i] <- as.numeric(gsub(",", ".", gsub("\\.", "", sp[,i])))
+}
 
-sp$`Furto por 100 mil habitantes`[sp$`Furto por 100 mil habitantes`>10000] <- sp$`Furto por 100 mil habitantes`[sp$`Furto por 100 mil habitantes`>10000]/10000
-sp$`Roubo por 100 mil habitantes`[sp$`Roubo por 100 mil habitantes`>10000] <- sp$`Roubo por 100 mil habitantes`[sp$`Roubo por 100 mil habitantes`>10000]/10000
-sp$`Furto e Roubo de Veículo por 100 mil habitantes`[sp$`Furto e Roubo de Veículo por 100 mil habitantes`>10000] <- sp$`Furto e Roubo de Veículo por 100 mil habitantes`[sp$`Furto e Roubo de Veículo por 100 mil habitantes`>10000]/10000
-sp$`Furto por 100 mil veículos`[sp$`Furto por 100 mil veículos`>10000] <- sp$`Furto por 100 mil veículos`[sp$`Furto por 100 mil veículos`>10000]/10000
-sp$`Roubo por 100 mil veículos`[sp$`Roubo por 100 mil veículos`>10000] <- sp$`Roubo por 100 mil veículos`[sp$`Roubo por 100 mil veículos`>10000]/10000
+nrow(as.data.frame(table(sp$Cidade)))#645 municipios
 
+sao_p <- sp[!sp$Ano=="None",]
 
-sp$`Homicídio Doloso por 100 mil habitantes` <- gsub(",", ".", sp$`Homicídio Doloso por 100 mil habitantes`)
-#sp$`Homicídio Doloso por 100 mil habitantes` <- gsub("None", NA, sp$`Homicídio Doloso por 100 mil habitantes`)
+nrow(as.data.frame(table(sao_p$Cidade)))#645 municipios porém n há dados para
+#todos
 
-#sp <- sp[!sp$Ano=="None",]
-sp19 <- sp[sp$Ano==2019,]
+sp19 <- sao_p[sao_p$Ano==2019,]
 
-as=ggplot(data = sp19, mapping = aes(x = as.character(sp19$Regiao), y =as.numeric(sp19$`Homicídio Doloso por 100 mil habitantes`))) +
+nrow(as.data.frame(table(sp19$Cidade)))#645 municipios porém n há dados para
+
+as=ggplot(data = sp19, mapping = aes(x = as.character(sp19$Cidade), y =as.numeric(as.character(sp19$Homicídio.Doloso.por.100.mil.habitantes)))) +
   geom_col()+coord_flip()+
-  labs(title="Homicídio Doloso por 100 mil habitantes no estado de SP em 2019 (por região).",x="Região",y="Homicídios")+theme_few()+ylim(min = 0, max = max(as.numeric(sp$`Homicídio Doloso por 100 mil habitantes`)))
+  labs(title="Homicídio Doloso por 100 mil habitantes no estado de SP em 2019 (por região).",x="Região",y="Homicídios")+theme_few()+ylim(min = 0, max = max(as.numeric(as.character(sp19$Homicídio.Doloso.por.100.mil.habitantes))))
 as
 
-#Municipios
-#juntando databases
-# join the databases
-sp19$Cidade
-muni$name_muni
-?read_intermediate_region()
-
-muni_sp <- dplyr::left_join(muni, sp19, by = c("name_muni" = "Cidade"))
-
-# plot dos municípios de sp
-ggplot() +
-  geom_sf(data=muni_sp, fill="#2D3E50", color="#FEBF57", size=.15, show.legend = FALSE) +
-  labs(subtitle="Municipalidades de SP, 2007", size=8) +
-  theme_minimal() 
-
-# plot dos municípios de sp
-ggplot() +
-  geom_sf(data=muni_sp,aes(fill=as.numeric(as.character(muni_sp$`Homicídio Doloso por 100 mil habitantes`))), color="Black", size=.15) +
-  scale_fill_continuous()+
-  labs(subtitle="Municipalidades de SP", size=8,fill="Mortes por 100 mil") +
-  theme_minimal()+theme(legend.position = "right") 
-
-#ds_Sp<- read_csv("ds_SSP_PolicyProductivity_SP-BR_utf8_2001-2020_rev3.csv")
 
 ########################################
 
@@ -88,23 +62,85 @@ mesos <- read_intermediate_region(code_intermediate = "SP",year=2019)
 mesos$name_intermediate
 table(sp19$Regiao)
 
+# plot dos municípios de sp
+ggplot() +
+  geom_sf(data=mesos,aes(fill=mesos$name_intermediate), size=.15) +
+  labs(subtitle="Mesorregiões de SP, 2019", size=8,fill="Regiões") +
+  theme_minimal() + scale_fill_stata()
+
+#mesorregioes
+#https://www.saopaulo.sp.gov.br/spnoticias/governo-do-estado-atualiza-classificacao-do-plano-sp-sem-regressao-de-regioes/
+#https://pt.wikipedia.org/wiki/Lista_de_mesorregi%C3%B5es_e_microrregi%C3%B5es_de_S%C3%A3o_Paulo#Mesorregi%C3%A3o_de_Bauru
+marilia <- c("Arco-Íris",
+             "Bastos",
+             "Herculândia",
+             "Iacri",
+             "Queiroz",
+             "Quintana",
+             "Tupã","Álvaro de Carvalho",
+              "Alvinlândia",
+              "Echaporã",
+              "Fernão",
+              "Gália",
+              "Garça",
+              "Lupércio",
+             "Marília",
+              "Ocauçu",
+              "Oriente",
+              "Oscar Bressane",
+              "Pompeia",
+              "Vera Cruz","Manduri",
+             "Óleo",
+             "Ourinhos",
+             "Piraju",
+             "Ribeirão do Sul",
+             "Salto Grande",
+             "Santa Cruz do Rio Pardo",
+             "São Pedro do Turvo",
+             "Sarutaiá",
+             "Taguaí",
+             "Tejupá",
+             "Timburi")
+
+
+
+#mudando regiao de marilia
+where <- match(sp19$Cidade,marilia)
+sp19$Cidade[!is.na(where)]
+sp19$Regiao[!is.na(where)] <-"Marília"
+
+sp19$Regiao[sp19$Cidade=="Araraquara"]="Araraquara"
+ 
+sp19$Regiao[sp19$Cidade=="São Carlos"]="Araraquara"
+
 sp19$Regiao[sp19$Regiao=="Capital"]="São Paulo"  
+
 sp19$Regiao[sp19$Regiao=="Santos"]="São Paulo"  
-sp19$Regiao[sp19$Regiao=="Piracicaba"]="Araraquara"
+
+sp19$Regiao[sp19$Regiao=="Piracicaba"]="Campinas"#mapa wiki
+
 sp19$Regiao[sp19$Regiao=="Grande São Paulo (exclui a Capital)"]="São Paulo" 
 
 df=as.data.frame(table(sp19$Regiao))#igual
 df$Var1
+mesos_sp$name_intermediate
 
-soma_homi_100mil <- aggregate(as.numeric(sp19$`Homicídio Doloso por 100 mil habitantes`),by=list(sp19$Regiao),sum)
+soma_homi_100mil <- aggregate(as.numeric(sp19$Homicídio.Doloso.por.100.mil.habitantes),by=list(sp19$Regiao),sum)
 df$soma_homi_100mil <- soma_homi_100mil$x
+furto <- aggregate(as.numeric(sp19$Furto.por.100.mil.habitantes),by=list(sp19$Regiao),sum)
+df$furto <- furto$x
+furto <- aggregate(as.numeric(sp19$Roubo.por.100.mil.habitantes),by=list(sp19$Regiao),sum)
+df$roubo <- furto$x
+furto <- aggregate(as.numeric(sp19$Furto.e.Roubo.de.Veículo.por.100.mil.habitantes),by=list(sp19$Regiao),sum)
+df$furto_roubo_veic_habi <- furto$x
+furto <- aggregate(as.numeric(sp19$Furto.por.100.mil.veículos),by=list(sp19$Regiao),sum)
+df$furto_100mil_veic <- furto$x
+furto <- aggregate(as.numeric(sp19$Roubo.por.100.mil.veículos),by=list(sp19$Regiao),sum)
+df$roubo_100mil_veic <- furto$x
+furto <- aggregate(as.numeric(sp19$Furto.e.Roubo.de.Veículo.por.100.mil.veículos),by=list(sp19$Regiao),sum)
+df$furto_roubo_100mil_veic <- furto$x
 
 mesos_sp <- dplyr::left_join(mesos, df, by = c("name_intermediate" = "Var1"))
-
-#Posso olhar krigagem para isso, nos muncipios
-#e https://www.r-bloggers.com/2016/04/missing-value-treatment/
-mesos_sp$soma_homi_100mil[is.na(mesos_sp$soma_homi_100mil)] <- mean(mesos_sp$soma_homi_100mil,na.rm = T)
-mesos_sp$soma_homi_100mil
 
 ggplot() +
   geom_sf(data=mesos_sp,aes(fill=as.numeric(as.character(mesos_sp$soma_homi_100mil))), color="Black", size=.15) +
@@ -176,9 +212,9 @@ mesos_sp_sp$quad <- quadrant
 # plot in r
 #may
 
-( aug <- ggplot(data = mesos_sp) +
+(aug <- ggplot(data = mesos_sp) +
     geom_sf(aes(fill = mesos_sp_sp$quad)) +
-    scale_fill_manual(values=c("red","#ADD8E6","blue"))+theme(legend.position ="bottom",legend.title=element_text(size=14),legend.text=element_text(size=15),legend.direction = "horizontal",
+    scale_fill_manual(values=c("red","blue"))+theme(legend.position ="bottom",legend.title=element_text(size=14),legend.text=element_text(size=15),legend.direction = "horizontal",
                                                               axis.ticks.x=element_blank(), axis.text.x=element_blank())+
     labs(title = "Homicidios por 100 mil em 2019",fill="Cluster"))
 
