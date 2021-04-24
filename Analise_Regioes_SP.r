@@ -145,7 +145,44 @@ mesos_sp <- dplyr::left_join(mesos, df, by = c("name_intermediate" = "Var1"))
 ggplot() +
   geom_sf(data=mesos_sp,aes(fill=as.numeric(as.character(mesos_sp$soma_homi_100mil))), color="Black", size=.15) +
   scale_fill_continuous()+
-  labs(subtitle="Municipalidades de SP", size=8,fill="Mortes por 100 mil") +
+  labs(subtitle="Mesorregiões de SP", size=8,fill="Mortes por 100 mil") +
+  theme_minimal()+theme(legend.position = "right") 
+
+ggplot() +
+  geom_sf(data=mesos_sp,aes(fill=as.numeric(as.character(mesos_sp$furto))), color="Black", size=.15) +
+  scale_fill_continuous()+
+  labs(subtitle="Mesorregiões de SP", size=8,fill="Furtos por 100 mil") +
+  theme_minimal()+theme(legend.position = "right") 
+
+ggplot() +
+  geom_sf(data=mesos_sp,aes(fill=as.numeric(as.character(mesos_sp$roubo))), color="Black", size=.15) +
+  scale_fill_continuous()+
+  labs(subtitle="Mesorregiões de SP", size=8,fill="Roubos por 100 mil") +
+  theme_minimal()+theme(legend.position = "right") 
+
+ggplot() +
+  geom_sf(data=mesos_sp,aes(fill=as.numeric(as.character(mesos_sp$furto_roubo_veic_habi))), color="Black", size=.15) +
+  scale_fill_continuous()+
+  labs(subtitle="Mesorregiões de SP", size=8,fill="Furto e Roubos de Veículos por 100 mil") +
+  theme_minimal()+theme(legend.position = "right") 
+
+
+ggplot() +
+  geom_sf(data=mesos_sp,aes(fill=as.numeric(as.character(mesos_sp$furto_100mil_veic))), color="Black", size=.15) +
+  scale_fill_continuous()+
+  labs(subtitle="Mesorregiões de SP", size=8,fill="Furto por 100 mil Veículos") +
+  theme_minimal()+theme(legend.position = "right") 
+
+ggplot() +
+  geom_sf(data=mesos_sp,aes(fill=as.numeric(as.character(mesos_sp$roubo_100mil_veic))), color="Black", size=.15) +
+  scale_fill_continuous()+
+  labs(subtitle="Mesorregiões de SP", size=8,fill="Roubo por 100 mil Veículos") +
+  theme_minimal()+theme(legend.position = "right") 
+
+ggplot() +
+  geom_sf(data=mesos_sp,aes(fill=as.numeric(as.character(mesos_sp$furto_roubo_100mil_veic))), color="Black", size=.15) +
+  scale_fill_continuous()+
+  labs(subtitle="Mesorregiões de SP", size=8,fill="Furto e Roubo por 100 mil Veículos") +
   theme_minimal()+theme(legend.position = "right") 
 
 #sf to sp
@@ -217,26 +254,3 @@ mesos_sp_sp$quad <- quadrant
     scale_fill_manual(values=c("red","blue"))+theme(legend.position ="bottom",legend.title=element_text(size=14),legend.text=element_text(size=15),legend.direction = "horizontal",
                                                               axis.ticks.x=element_blank(), axis.text.x=element_blank())+
     labs(title = "Homicidios por 100 mil em 2019",fill="Cluster"))
-
-###########################################################################################
-#FAZENDO COM OS SHPS
-names(sp19)[names(sp19) == "Cidade"] <- "NM_MUN"
-#sp19$NM_MUNICIP <- toupper(sp19$NM_MUNICIP)
-
-sp_city<-merge(munis,sp19,by="NM_MUN")
-sp_city$NM_MUN<-factor(sp_city$NM_MUN)
-sp_city <- sp_city[order(sp_city$`Homicídio Doloso por 100 mil habitantes`),] # order the data [very important!]
-
-
-vcolor=c("#FFFFFF","#00FFF3","#0FBE09","#003AFF","red")
-i_vcolor=c("red","#003AFF","#0FBE09","#00FFF3","#FFFFFF")
-
-sp_city$NM_MUN <- as.factor(sp_city$NM_MUN)
-levels(sp_city$NM_MUN)
-
-plot(sp_city,col=sp_city$`Homicídio Doloso por 100 mil habitantes`)
-legend("topleft", inset=.05,lty=c(1,1), text.col=seq_along(sp_city$`Homicídio Doloso por 100 mil habitantes`),legend=sp_city$`Homicídio Doloso por 100 mil habitantes`, col=sp_city$`Homicídio Doloso por 100 mil habitantes`)
-?plot
-#################################################################################
-
-#krigagem // kriging
