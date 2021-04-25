@@ -151,7 +151,7 @@ ggplot() +
   scale_fill_continuous()+
   labs(subtitle="Mesorregiões de SP", size=8,fill="Mortes por 100 mil") +
   theme_minimal()+theme(legend.position = "right")  +
-  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))
+  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()
 
 
 
@@ -160,14 +160,14 @@ ggplot() +
   scale_fill_continuous()+
   labs(subtitle="Mesorregiões de SP", size=8,fill="Furtos por 100 mil") +
   theme_minimal()+theme(legend.position = "right")  +
-  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))
+  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()
 
 ggplot() +
   geom_sf(data=mesos_sp,aes(fill=as.numeric(as.character(mesos_sp$roubo))), color="Black", size=.15) +
   scale_fill_continuous()+
   labs(subtitle="Mesorregiões de SP", size=8,fill="Roubos por 100 mil") +
   theme_minimal()+theme(legend.position = "right")  +
-  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))
+  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()
 
 
 ggplot() +
@@ -175,7 +175,7 @@ ggplot() +
   scale_fill_continuous()+
   labs(subtitle="Mesorregiões de SP", size=8,fill="Furto e Roubos de Veículos por 100 mil") +
   theme_minimal()+theme(legend.position = "right")  +
-  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))
+  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()
 
 
 
@@ -184,7 +184,7 @@ ggplot() +
   scale_fill_continuous()+
   labs(subtitle="Mesorregiões de SP", size=8,fill="Furto por 100 mil Veículos") +
   theme_minimal()+theme(legend.position = "right")  +
-  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))
+  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()
 
 
 ggplot() +
@@ -192,14 +192,14 @@ ggplot() +
   scale_fill_continuous()+
   labs(subtitle="Mesorregiões de SP", size=8,fill="Roubo por 100 mil Veículos") +
   theme_minimal()+theme(legend.position = "right")  +
-  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))
+  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()
 
 
 ggplot() +
   geom_sf(data=mesos_sp,aes(fill=as.numeric(as.character(mesos_sp$furto_roubo_100mil_veic))), color="Black", size=.15) +
   scale_fill_continuous()+
   labs(subtitle="Mesorregiões de SP", size=8,fill="Furto e Roubo por 100 mil Veículos") +
-  theme_minimal()+theme(legend.position = "right")  +
+  theme_minimal()+theme(legend.position = "right")  + scale_fill_viridis_c()+
   geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))
 
 
