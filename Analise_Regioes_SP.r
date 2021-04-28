@@ -269,4 +269,3 @@ mesos_sp_sp$quad <- quadrant
     labs(title = "Homicidios por 100 mil em 2019",fill="Cluster"))
 
 
-
