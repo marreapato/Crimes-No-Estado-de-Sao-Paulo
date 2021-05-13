@@ -35,7 +35,7 @@ head(sp)
 
 #commas to dot
 for(i in 2:8){
-sp[,i] <- as.numeric(gsub(",", ".", gsub("\\.", "", sp[,i])))
+  sp[,i] <- as.numeric(gsub(",", ".", gsub("\\.", "", sp[,i])))
 }
 
 nrow(as.data.frame(table(sp$Cidade)))#645 municipios
@@ -78,18 +78,18 @@ marilia <- c("Arco-Íris",
              "Queiroz",
              "Quintana",
              "Tupã","Álvaro de Carvalho",
-              "Alvinlândia",
-              "Echaporã",
-              "Fernão",
-              "Gália",
-              "Garça",
-              "Lupércio",
+             "Alvinlândia",
+             "Echaporã",
+             "Fernão",
+             "Gália",
+             "Garça",
+             "Lupércio",
              "Marília",
-              "Ocauçu",
-              "Oriente",
-              "Oscar Bressane",
-              "Pompeia",
-              "Vera Cruz","Manduri",
+             "Ocauçu",
+             "Oriente",
+             "Oscar Bressane",
+             "Pompeia",
+             "Vera Cruz","Manduri",
              "Óleo",
              "Ourinhos",
              "Piraju",
@@ -110,7 +110,7 @@ sp19$Cidade[!is.na(where)]
 sp19$Regiao[!is.na(where)] <-"Marília"
 
 sp19$Regiao[sp19$Cidade=="Araraquara"]="Araraquara"
- 
+
 sp19$Regiao[sp19$Cidade=="São Carlos"]="Araraquara"
 
 sp19$Regiao[sp19$Regiao=="Capital"]="São Paulo"  
@@ -123,7 +123,6 @@ sp19$Regiao[sp19$Regiao=="Grande São Paulo (exclui a Capital)"]="São Paulo"
 
 df=as.data.frame(table(sp19$Regiao))#igual
 df$Var1
-mesos_sp$name_intermediate
 
 soma_homi_100mil <- aggregate(as.numeric(sp19$Homicídio.Doloso.por.100.mil.habitantes),by=list(sp19$Regiao),sum)
 df$soma_homi_100mil <- soma_homi_100mil$x
@@ -265,7 +264,327 @@ mesos_sp_sp$quad <- quadrant
 (aug <- ggplot(data = mesos_sp) +
     geom_sf(aes(fill = mesos_sp_sp$quad)) +
     scale_fill_manual(values=c("red","blue"))+theme(legend.position ="bottom",legend.title=element_text(size=14),legend.text=element_text(size=15),legend.direction = "horizontal",
-                                                              axis.ticks.x=element_blank(), axis.text.x=element_blank())+
+                                                    axis.ticks.x=element_blank(), axis.text.x=element_blank())+
     labs(title = "Homicidios por 100 mil em 2019",fill="Cluster"))
 
 
+
+#furtos 100 mil
+#death_pop
+moran.plot(mesos_sp_sp$furto, PPV3.w, zero.policy=TRUE)
+moran.test(mesos_sp_sp$furto,PPV3.w,zero.policy = TRUE,na.action = na.omit)
+moran.mc(nsim=10000,mesos_sp_sp$furto,PPV3.w,zero.policy = TRUE,na.action = na.omit)
+
+#monthly death pop local
+local.mi.prod<-localmoran(mesos_sp_sp$furto, PPV3.w)
+
+mesos_sp_sp$lmi<-local.mi.prod[,1]
+
+mesos_sp_sp$lmi.p<-local.mi.prod[,5]
+
+mesos_sp_sp$lmi.p.sig<-as.factor(ifelse(local.mi.prod[,5]<.001,"Sig p<.001",
+                                        ifelse(local.mi.prod[,5]<.05,"Sig p<.05", "NS" )))
+
+#require("RColorBrewer")
+
+#require("sp")
+
+spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), main = "Homicidios")
+
+#validated
+
+#boxmap
+quadrant <- vector(mode="numeric",length=nrow(local.mi.prod))
+
+# centers the variable of interest around its mean
+m.qualification <-mesos_sp_sp$furto- mean(mesos_sp_sp$furto)     
+
+# centers the local Moran's around the mean
+m.local <- local.mi.prod[,1] - mean(local.mi.prod[,1])    
+
+# significance threshold
+signif <- 0.05 
+
+# builds a data quadrant
+#positions
+quadrant[m.qualification >0 & m.local>0] <- "HH"#AA  
+quadrant[m.qualification <0 & m.local<0] <- "LL"#BB1      
+quadrant[m.qualification <0 & m.local>0] <- "LH"#BA2
+quadrant[m.qualification >0 & m.local<0] <- "HL"#AB3
+#quadrant[local.mi.prod[,5]>signif] <- 0#you can choose not to run it
+mesos_sp_sp$quad <- quadrant
+# plot in r
+#may
+
+(aug <- ggplot(data = mesos_sp) +
+    geom_sf(aes(fill = mesos_sp_sp$quad)) +
+    scale_fill_manual(values=c("red","blue"))+theme(legend.position ="bottom",legend.title=element_text(size=14),legend.text=element_text(size=15),legend.direction = "horizontal",
+                                                    axis.ticks.x=element_blank(), axis.text.x=element_blank())+
+    labs(title = "Homicidios por 100 mil em 2019",fill="Cluster"))
+
+
+
+#roubos 100 mil
+#death_pop
+moran.plot(mesos_sp_sp$roubo, PPV3.w, zero.policy=TRUE)
+moran.test(mesos_sp_sp$roubo,PPV3.w,zero.policy = TRUE,na.action = na.omit)
+moran.mc(nsim=10000,mesos_sp_sp$roubo,PPV3.w,zero.policy = TRUE,na.action = na.omit)
+
+#monthly death pop local
+local.mi.prod<-localmoran(mesos_sp_sp$furto, PPV3.w)
+
+mesos_sp_sp$lmi<-local.mi.prod[,1]
+
+mesos_sp_sp$lmi.p<-local.mi.prod[,5]
+
+mesos_sp_sp$lmi.p.sig<-as.factor(ifelse(local.mi.prod[,5]<.001,"Sig p<.001",
+                                        ifelse(local.mi.prod[,5]<.05,"Sig p<.05", "NS" )))
+
+#require("RColorBrewer")
+
+#require("sp")
+
+spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), main = "Homicidios")
+
+#validated
+
+#boxmap
+quadrant <- vector(mode="numeric",length=nrow(local.mi.prod))
+
+# centers the variable of interest around its mean
+m.qualification <-mesos_sp_sp$roubo- mean(mesos_sp_sp$roubo)     
+
+# centers the local Moran's around the mean
+m.local <- local.mi.prod[,1] - mean(local.mi.prod[,1])    
+
+# significance threshold
+signif <- 0.05 
+
+# builds a data quadrant
+#positions
+quadrant[m.qualification >0 & m.local>0] <- "HH"#AA  
+quadrant[m.qualification <0 & m.local<0] <- "LL"#BB1      
+quadrant[m.qualification <0 & m.local>0] <- "LH"#BA2
+quadrant[m.qualification >0 & m.local<0] <- "HL"#AB3
+#quadrant[local.mi.prod[,5]>signif] <- 0#you can choose not to run it
+mesos_sp_sp$quad <- quadrant
+# plot in r
+#may
+
+(aug <- ggplot(data = mesos_sp) +
+    geom_sf(aes(fill = mesos_sp_sp$quad)) +
+    scale_fill_manual(values=c("red","blue"))+theme(legend.position ="bottom",legend.title=element_text(size=14),legend.text=element_text(size=15),legend.direction = "horizontal",
+                                                    axis.ticks.x=element_blank(), axis.text.x=element_blank())+
+    labs(title = "Homicidios por 100 mil em 2019",fill="Cluster"))
+
+#roubos 100 mil
+#death_pop
+moran.plot(mesos_sp_sp$furto_roubo_veic_habi, PPV3.w, zero.policy=TRUE)
+moran.test(mesos_sp_sp$furto_roubo_veic_habi,PPV3.w,zero.policy = TRUE,na.action = na.omit)
+moran.mc(nsim=10000,mesos_sp_sp$furto_roubo_veic_habi,PPV3.w,zero.policy = TRUE,na.action = na.omit)
+
+#monthly death pop local
+local.mi.prod<-localmoran(mesos_sp_sp$furto_roubo_veic_habi, PPV3.w)
+
+mesos_sp_sp$lmi<-local.mi.prod[,1]
+
+mesos_sp_sp$lmi.p<-local.mi.prod[,5]
+
+mesos_sp_sp$lmi.p.sig<-as.factor(ifelse(local.mi.prod[,5]<.001,"Sig p<.001",
+                                        ifelse(local.mi.prod[,5]<.05,"Sig p<.05", "NS" )))
+
+#require("RColorBrewer")
+
+#require("sp")
+
+spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), main = "Homicidios")
+
+#validated
+
+#boxmap
+quadrant <- vector(mode="numeric",length=nrow(local.mi.prod))
+
+# centers the variable of interest around its mean
+m.qualification <-mesos_sp_sp$furto_roubo_veic_habi- mean(mesos_sp_sp$furto_roubo_veic_habi)     
+
+# centers the local Moran's around the mean
+m.local <- local.mi.prod[,1] - mean(local.mi.prod[,1])    
+
+# significance threshold
+signif <- 0.05 
+
+# builds a data quadrant
+#positions
+quadrant[m.qualification >0 & m.local>0] <- "HH"#AA  
+quadrant[m.qualification <0 & m.local<0] <- "LL"#BB1      
+quadrant[m.qualification <0 & m.local>0] <- "LH"#BA2
+quadrant[m.qualification >0 & m.local<0] <- "HL"#AB3
+#quadrant[local.mi.prod[,5]>signif] <- 0#you can choose not to run it
+mesos_sp_sp$quad <- quadrant
+# plot in r
+#may
+
+(aug <- ggplot(data = mesos_sp) +
+    geom_sf(aes(fill = mesos_sp_sp$quad)) +
+    scale_fill_manual(values=c("red","blue"))+theme(legend.position ="bottom",legend.title=element_text(size=14),legend.text=element_text(size=15),legend.direction = "horizontal",
+                                                    axis.ticks.x=element_blank(), axis.text.x=element_blank())+
+    labs(title = "Homicidios por 100 mil em 2019",fill="Cluster"))
+
+#roubos 100 mil
+#death_pop
+moran.plot(mesos_sp_sp$furto_100mil_veic, PPV3.w, zero.policy=TRUE)
+moran.test(mesos_sp_sp$furto_100mil_veic,PPV3.w,zero.policy = TRUE,na.action = na.omit)
+moran.mc(nsim=10000,mesos_sp_sp$furto_100mil_veic,PPV3.w,zero.policy = TRUE,na.action = na.omit)
+
+#monthly death pop local
+local.mi.prod<-localmoran(mesos_sp_sp$furto_100mil_veic, PPV3.w)
+
+mesos_sp_sp$lmi<-local.mi.prod[,1]
+
+mesos_sp_sp$lmi.p<-local.mi.prod[,5]
+
+mesos_sp_sp$lmi.p.sig<-as.factor(ifelse(local.mi.prod[,5]<.001,"Sig p<.001",
+                                        ifelse(local.mi.prod[,5]<.05,"Sig p<.05", "NS" )))
+
+#require("RColorBrewer")
+
+#require("sp")
+
+spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), main = "Homicidios")
+
+#validated
+
+#boxmap
+quadrant <- vector(mode="numeric",length=nrow(local.mi.prod))
+
+# centers the variable of interest around its mean
+m.qualification <-mesos_sp_sp$furto_100mil_veic- mean(mesos_sp_sp$furto_100mil_veic)     
+
+# centers the local Moran's around the mean
+m.local <- local.mi.prod[,1] - mean(local.mi.prod[,1])    
+
+# significance threshold
+signif <- 0.05 
+
+# builds a data quadrant
+#positions
+quadrant[m.qualification >0 & m.local>0] <- "HH"#AA  
+quadrant[m.qualification <0 & m.local<0] <- "LL"#BB1      
+quadrant[m.qualification <0 & m.local>0] <- "LH"#BA2
+quadrant[m.qualification >0 & m.local<0] <- "HL"#AB3
+#quadrant[local.mi.prod[,5]>signif] <- 0#you can choose not to run it
+mesos_sp_sp$quad <- quadrant
+# plot in r
+#may
+
+(aug <- ggplot(data = mesos_sp) +
+    geom_sf(aes(fill = mesos_sp_sp$quad)) +
+    scale_fill_manual(values=c("red","blue"))+theme(legend.position ="bottom",legend.title=element_text(size=14),legend.text=element_text(size=15),legend.direction = "horizontal",
+                                                    axis.ticks.x=element_blank(), axis.text.x=element_blank())+
+    labs(title = "Homicidios por 100 mil em 2019",fill="Cluster"))
+
+#roubos 100 mil
+#death_pop
+moran.plot(mesos_sp_sp$roubo_100mil_veic, PPV3.w, zero.policy=TRUE)
+moran.test(mesos_sp_sp$roubo_100mil_veic,PPV3.w,zero.policy = TRUE,na.action = na.omit)
+moran.mc(nsim=10000,mesos_sp_sp$roubo_100mil_veic,PPV3.w,zero.policy = TRUE,na.action = na.omit)
+
+#monthly death pop local
+local.mi.prod<-localmoran(mesos_sp_sp$roubo_100mil_veic, PPV3.w)
+
+mesos_sp_sp$lmi<-local.mi.prod[,1]
+
+mesos_sp_sp$lmi.p<-local.mi.prod[,5]
+
+mesos_sp_sp$lmi.p.sig<-as.factor(ifelse(local.mi.prod[,5]<.001,"Sig p<.001",
+                                        ifelse(local.mi.prod[,5]<.05,"Sig p<.05", "NS" )))
+
+#require("RColorBrewer")
+
+#require("sp")
+
+spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), main = "Homicidios")
+
+#validated
+
+#boxmap
+quadrant <- vector(mode="numeric",length=nrow(local.mi.prod))
+
+# centers the variable of interest around its mean
+m.qualification <-mesos_sp_sp$roubo_100mil_veic- mean(mesos_sp_sp$roubo_100mil_veic)     
+
+# centers the local Moran's around the mean
+m.local <- local.mi.prod[,1] - mean(local.mi.prod[,1])    
+
+# significance threshold
+signif <- 0.05 
+
+# builds a data quadrant
+#positions
+quadrant[m.qualification >0 & m.local>0] <- "HH"#AA  
+quadrant[m.qualification <0 & m.local<0] <- "LL"#BB1      
+quadrant[m.qualification <0 & m.local>0] <- "LH"#BA2
+quadrant[m.qualification >0 & m.local<0] <- "HL"#AB3
+#quadrant[local.mi.prod[,5]>signif] <- 0#you can choose not to run it
+mesos_sp_sp$quad <- quadrant
+# plot in r
+#may
+
+(aug <- ggplot(data = mesos_sp) +
+    geom_sf(aes(fill = mesos_sp_sp$quad)) +
+    scale_fill_manual(values=c("red","lightblue","blue"))+theme(legend.position ="bottom",legend.title=element_text(size=14),legend.text=element_text(size=15),legend.direction = "horizontal",
+                                                    axis.ticks.x=element_blank(), axis.text.x=element_blank())+
+    labs(title = "Homicidios por 100 mil em 2019",fill="Cluster"))
+
+#roubos 100 mil
+#death_pop
+moran.plot(mesos_sp_sp$furto_roubo_100mil_veic, PPV3.w, zero.policy=TRUE)
+moran.test(mesos_sp_sp$furto_roubo_100mil_veic,PPV3.w,zero.policy = TRUE,na.action = na.omit)
+moran.mc(nsim=10000,mesos_sp_sp$furto_roubo_100mil_veic,PPV3.w,zero.policy = TRUE,na.action = na.omit)
+
+#monthly death pop local
+local.mi.prod<-localmoran(mesos_sp_sp$furto_roubo_100mil_veic, PPV3.w)
+
+mesos_sp_sp$lmi<-local.mi.prod[,1]
+
+mesos_sp_sp$lmi.p<-local.mi.prod[,5]
+
+mesos_sp_sp$lmi.p.sig<-as.factor(ifelse(local.mi.prod[,5]<.001,"Sig p<.001",
+                                        ifelse(local.mi.prod[,5]<.05,"Sig p<.05", "NS" )))
+
+#require("RColorBrewer")
+
+#require("sp")
+
+spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), main = "Homicidios")
+
+#validated
+
+#boxmap
+quadrant <- vector(mode="numeric",length=nrow(local.mi.prod))
+
+# centers the variable of interest around its mean
+m.qualification <-mesos_sp_sp$furto_roubo_100mil_veic- mean(mesos_sp_sp$furto_roubo_100mil_veic)     
+
+# centers the local Moran's around the mean
+m.local <- local.mi.prod[,1] - mean(local.mi.prod[,1])    
+
+# significance threshold
+signif <- 0.05 
+
+# builds a data quadrant
+#positions
+quadrant[m.qualification >0 & m.local>0] <- "HH"#AA  
+quadrant[m.qualification <0 & m.local<0] <- "LL"#BB1      
+quadrant[m.qualification <0 & m.local>0] <- "LH"#BA2
+quadrant[m.qualification >0 & m.local<0] <- "HL"#AB3
+#quadrant[local.mi.prod[,5]>signif] <- 0#you can choose not to run it
+mesos_sp_sp$quad <- quadrant
+# plot in r
+#may
+
+(aug <- ggplot(data = mesos_sp) +
+    geom_sf(aes(fill = mesos_sp_sp$quad)) +
+    scale_fill_manual(values=c("red","lightblue","blue"))+theme(legend.position ="bottom",legend.title=element_text(size=14),legend.text=element_text(size=15),legend.direction = "horizontal",
+                                                                axis.ticks.x=element_blank(), axis.text.x=element_blank())+
+    labs(title = "Homicidios por 100 mil em 2019",fill="Cluster"))
