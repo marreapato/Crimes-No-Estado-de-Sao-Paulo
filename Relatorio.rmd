@@ -1,0 +1,101 @@
+---
+title: "Análise Espacial da Criminalidade no Estado de SP em 2019"
+author: "Lucas Rabelo"
+date: "24/05/2021"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+## Introduction {.tabset .tabset-fade .tabset-pills}
+   
+ 
+ The spatial method was calculated by using the Global Moran's I and the Local Moran's I $\!\!^4$, which is also known as a LISA statistic (Local Indicator of Spatial Association), both being used as indicators of spatial association.
+ 
+## Métodos
+ 
+
+### Índice de Moran
+
+ Para avaliar a dependência espacial foi utilizado o método K-ésimo vizinho mais próximo (KNN, do inglês K-nearest neighbors) para ligar os polígonos e criar a matriz de vizinhança normalizada por linha, para que fossem calculados o Índice de Moran global e o local. O índice global é o método tradicionalmente usado e condensa a dependência espacial em apenas um número $\!\!^7$, no entanto o uso do indicador local de associação espacial (LISA) utilizado para identificar padrões espaciais, se faz útil pois de acordo com Maia, Gomes e Almeida (2018, p.930) enquanto o índice de Moran global pode sugerir que haja baixa correlação espacial nos dados, os valores do LISA podem identificar sub-regiões geográficas em que o agrupamento (clustering) negativo ou positivo ocorram  $\!\!^8$.
+
+O Índice global de Moran é calculado **(Equação 1)** de tal maneira que temos 
+$w$ como sendo a matriz de vizinhança, e $x$ os valores da variável de estudo e $n$ o número de polígonos identificados e $\overline x$ é a média:
+
+
+**Equação 1**
+
+$$Im = \frac{n\sum_{i=1}^{n}\sum_{j=1}^{n}(x_{i}-\overline{x})(x_{j}-\overline{x})w_{ij}}{W\sum_{i=1}^{n}(x_{i}-\overline{x})^2}$$
+
+Onde $W$ é definido pela seguinte equação:
+ $$W=\sum_{i=1}^{n}\sum_{j=1}^{n}w_{ij}$$
+ 
+Os valores variam de 1 a -1, sendo que o 0 indica a ausência de correlação espacial, no entanto como valores dentre positivos e até 1 indicam correlação direta e positiva e negativos até -1 correlação inversa, por estarmos interessados na presença de dependência espacial positiva os testes de hipótese foram construídos com nível de confiança de 95%, seguindo a premissa de que a hipótese alternativa corresponde a um índice maior que zero, e a hipótese nula é de independência espacial, ou seja H0: I = 0 e H1: I > 0.A validação do índice foi feita utilizando 10.000 simulações em um teste de permutações aleatórias (*Monte-Carlo*) $\!\!^9$.
+
+Já o Índice de Moran local (LISA) é calculado pela seguinte equação (**Equação 2**):
+
+
+**Equação 2**
+ $$I(i) = \frac{x_{i}-\overline x}{s^{2}_{i}}\sum_{j=1}^{n}w_{ij}(x_{j}-\overline{x}), i=1,...,n, j\neq i$$
+ Onde $s^{2}_{i}$ é a variância da variável de estudo $x_{i}$:
+  $$s^{2}(i) = \frac{\sum_{j=1}^{n}(x_{j}-\overline x)^{2}}{n-1}, i=1,...,n, j\neq i$$
+  
+  Os Boxmaps são uma representação cartográfica dos quadrantes do gráfico de dispersão de Moran, onde temos que em Seffrin, Araujo e Bazzi (2018,p.28) os valores HH e LL significam respectivamente que essas áreas possuem valores altos rodeadas por áreas que apresentam valores também altos e valores baixos da variável de interesse, rodeadas por áreas que apresentam valores baixos, o valor LH representa áreas com valor baixo rodeada de outras áreas com valores altos, já o HL é o contrário, são regiões com valores altos próximas de locais com valores baixos.
+  
+### The Poisson Scan Statistc
+
+  The prospective scan statistic proposed by Kulldorff $\!\!^5$ was chosen to identify emerging spatio-temporal *clusters* in the cumulative number of cases for each month, to apply the technique it was considered that the data follows a Poisson distribution. The purely spatial scan statistic creates a wide variety of circular windows in different locations throughout the map, each one with a specific group of neighboring areas, all of these circular windows are also flexible in their two dimensions, size and locality, and may or not contain a *cluster* of events. A scan statistic is defined as the likelihood ratio over all possible circles and when maximized identifies the one which constitutes the most likely *cluster*, the *p*-value is obtained through the *Monte-Carlo* hypothesis test.
+ 
+ In opposition to the purely spatial scan statistic, the spatio-temporal scan statistic creates cylindrical windows in three dimensions, where the height is a representation of time, the cylinders are flexible in their circular bases and initial dates, hence only "alive" *clusters*, the ones which cylinders achieved the end of the study period are considered, the maximum likelihood ratio tests are conducted the same way as they are in the purely spatial scan statistic.
+ 
+ Spatio-temporal scan statistics are useful to identify emerging *clusters*, since purely spatial scan statistics have a few limitations as it's pointed by Kulldorff (2001, p. 66), there is little power to detect emerging *clusters* when conducting a purely spatial analysis for a long period of time, therefore the solution would be to use a spatio-temporal scan statistic. 
+
+## Results
+
+ When calculated for the number of deaths per inhabitant in each country **(Table 1)**, the highest index of global spatial association was achieved in April (IM=0.72; P-value<0.05), other months identified with high Global Moran's I values were November (IM=0.69; P-value<0.05) and December (IM=0.70; P-value<0.05). Whereas when computed for the number of infections per inhabitant caused by Covid-19 **(Table 2)**, the highest values for the Global Moran's I were found in October (IM=0.60; P-value<0.05), November (IM=0.67; P-value<0.05) and December (IM=0.58; P-value<0.05).
+ 
+ Considering the number of deaths per inhabitant, when identifying local spatial autocorrelation with the Local Moran's I  **(Picture 1)** after April, month with the highest Global Moran's I, spatial dependence was strong in Europe, South America and North America, with little difference in maps throughout the year. For the number of infections per inhabitant, after October, which was the first month with a high global dependence, local association was strong in Europe until the end of the year **(Picture 2)**.
+ 
+ The Spatio-Temporal Scan statistic was only computed for the number of cumulative cases during the pandemic **(Table 3)**, the method to calculate spatio-temporal *clusters* showed itself to be way more computer intensive than the calculation of the Global Moran's I and the *LISA*. But the Spatio-Temporal Scan statistic also was efficient to identify emerging *clusters* in space and time, with most of the locations in October and November also identified in the Local Moran's I for these months.
+ 
+## Discussion
+  
+  In April global cases of Covid-19 reached 1 million, in the same month the world also reached 3 million cases $\!\!^3$, with an exponential growth in the number of infections, the Global Moran's I was also very high for the number of deaths per inhabitant, while local spatial association was strong only in Europe, the boxmap **(Picture 3)** shows that all areas identified with local dependence for the number of deaths per inhabitant were either HH (High-High) clusters in April or HL (High-Low) clusters after April, which means that in general locations with a high number of deaths were close to other areas that also had a high number of deaths. Even though April was a very concerning month to the international community, global spatial autocorrelation on the number of cases per inhabitant only started to grow higher than IM>0.50 in October, but the boxmaps for the number of infections **(Picture 4)** show the same trend that happened for the number of deaths, when looking them together with the *LISA* maps **(Picture 2)** all locations identified with spatial association were either HH or HL *clusters*.
+
+  The Poisson Scan Statistic calculated for the number of cumulative cases identified the duration of emerging *clusters* in the number of infections throughout the year, in a comparison between a timeline of events that occurred in the pandemic $\!\!^3$ and the observed *clusters*, since March 25th the US was identified as an emerging *cluster* by the Scan Statistic and one day later turned out to be the country with most cases of Covid-19 in the World, in May 22th Brazil was identified as a *cluster* and in the same day surpassed Russia turning out to be the 2 $\!\!^n\!^d$ country with most cases in the world. Other patterns can be verified when comparing results given by the Scan Statistics against the locations identified as HH and HL *clusters* in the Boxmaps of infections per inhabitants **(Picture 4)**, all *clusters* of the Scan Statistic were also HH or HL *clusters* in the months they have been identified (October, November and December).
+  
+  When comparing both methods, the Poisson Spatio-Temporal Scan Statistic and the Moran's I, the Scan Statistic was efficient not only to detect emerging *clusters* of Covid-19 cases in space and time by identifying their duration, but also in showing "hidden" *clusters* not visible in LISA maps, such as small european countries like San Marino and Liechtenstein, since the implementation of a Poisson Scan Statistic demands too much computational power, the Moran's I is a better alternative inasmuch as it's easier to calculate and does not demand too much computational power.
+
+## Conclusion
+
+ Both the Poisson Scan Statistic proposed by Kulldorff, the Global and the Local Moran's I were already used before in studies about spatial and Spatio-temporal characteristics of Sars-CoV-2, whereas the Scan Statistic for instance was used once in studies about the Spatio-temporal behavior of Covid-19 in the state of Sergipe in Brazil $\!\!^1\!^0$, while both the Global Moran's I and the LISA were used in Chinese studies regarding the spatial characteristics of the pandemic in China  $\!\!^1\!^1$, in this paper these methods showed themselves to be useful when there is a need to study spatial and Spatio-temporal characteristics of a virus.
+ 
+ While the Global Moran's I could be used with great success to identify the spatial association in smaller areas affected by the virus and help in decision making while dealing with local outbreaks, the LISA would be useful not only to identify with more precision where the spatial association is occurring but it also should be used when the goal is to control Covid-19 outbreaks in larger areas. The Spatio-Temporal Scan Statistic should be used when trying to identify "alive" clusters and their initial date, therefore it would be a great tool in decision making when dealing not only with Covid-19 outbreaks but also with other diseases.
+  
+ 
+## Bibliography
+
+[1] - Muhammad Adnan Shereen, Suliman Khan, Abeer Kazmi, Nadia Bashir, Rabeea Siddique, COVID-19 infection: Origin, transmission, and characteristics of human coronaviruses, Journal of Advanced Research, Volume 24, 2020, Pages 91-98, ISSN 2090-1232, https://doi.org/10.1016/j.jare.2020.03.005.
+
+[2] - Tao Zhang, Qunfu Wu, Zhigang Zhang, Probable Pangolin Origin of SARS-CoV-2 Associated with the COVID-19 Outbreak, Current Biology, Volume 30, Issue 7, 2020, Pages 1346-1351.e2, ISSN 0960-9822, https://doi.org/10.1016/j.cub.2020.03.022.
+
+[3] -  Brodeur, *et al*. (2020): A Literature Review of the Economics of COVID-19, GLO Discussion Paper, No. 601, GlobalLabor Organization (GLO), Essen. Available at: http://hdl.handle.net/10419/222316
+
+
+[4] -CARDOSO, Carlos Eduardo de Paiva. Dependência Espacial, Setores Censitários, Zonas OD, Distritos, Sub Prefeituras e etc. [S.l]. Publicado em: 06/09/2007. <http://www.sinaldetransito.com.br/artigos/espacial.pdf>. Acesso em: 24/11/2020.
+
+[5] - Kulldorff, M. (2001). Prospective time periodic geographical disease surveillance using a scan statistic. Journal of the Royal Statistical Society: Series A (Statistics in Society), 164(1), 61–72. doi:10.1111/1467-985x.00186 
+
+[6] - Guidotti, E., Ardia, D., (2020), “COVID-19 Data Hub”, Journal of Open Source Software 5(51):2376, doi: 10.21105/joss.02376.
+
+[7] - BRAGA, Altemir da Silva.*et al*. Estudo de Dependência Espacial utilizando Análise de Dados de Área Aplicada na Mesorregião Metropolitana de Belo Horizonte por meio do Indicador Econômico PIB. 19ª SINAPE.  [S.l.]. 2010,  Disponível em: <http://www2.ime.unicamp.br/sinape/sites/default/files/Resumo%20expandido%20SINAPE.pdf>. Acesso em: 24/11/2020.
+
+[8] - MAIA, André Luis Santiago; GOMES, Gecynalda Soares da Silva; ALMEIDA, Isabelle Galdino de. SPATIAL STUDY OF INCIDENCE RATES OF OCCUPATIONAL ACCIDENTS IN BRAZIL FROM 2002 TO 2012. REVISTA BRASILEIRA DE BIOMETRIA, [S.l.], v. 36, n. 4, p. 927-941, dec. 2018. ISSN 1983-0823. Available at: <http://www.biometria.ufla.br/index.php/BBJ/article/view/322>. Date accessed: 24 nov. 2020. doi: https://doi.org/10.28951/rbb.v36i4.322.    
+
+[9] - SEFFRIN, R.; ARAUJO, E. C.; BAZZI, C. L.. Análise espacial de área aplicada a produtividade de soja na região oeste do Paraná utilizando o software R. R. bras. Geom., Curitiba, v. 6, n. 1, p. 23-43, jan/mar.2018. Disponível em: <https://periodicos.utfpr.edu.br/rbgeo/article/view/5912>. Acesso em: 24/11/2020.DOI: 10.3895/rbgeo.v6n1.5912
+
+[10] - ANDRADE, Lucas Almeida et al. Surveillance of the first cases of COVID-19 in Sergipe using a prospective spatiotemporal analysis: the spatial dispersion and its public health implications. Rev. Soc. Bras. Med. Trop. [online]. 2020, vol.53 [cited  2021-01-13], e20200287. Available from: <http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0037-86822020000100641&lng=en&nrm=iso>.  Epub June 01, 2020. ISSN 1678-9849.  https://doi.org/10.1590/0037-8682-0287-2020
+
+[11] - Dayun Kang, Hyunho Choi, Jong-Hun Kim, Jungsoon Choi,
+Spatial epidemic dynamics of the COVID-19 outbreak in China,
+International Journal of Infectious Diseases, Volume 94, 2020, Pages 96-102, ISSN 1201-9712, Available at: <https://www.sciencedirect.com/science/article/pii/S1201971220302095>. https://doi.org/10.1016/j.ijid.2020.03.076.
