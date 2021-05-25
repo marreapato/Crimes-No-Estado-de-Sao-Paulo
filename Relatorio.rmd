@@ -10,8 +10,7 @@ output:
 ## Introdução {.tabset .tabset-fade .tabset-pills}
    
  
- 
- The spatial method was calculated by using the Global Moran's I and the Local Moran's I $\!\!^4$, which is also known as a LISA statistic (Local Indicator of Spatial Association), both being used as indicators of spatial association.
+ O método espacial foi calculado por meio do Global Moran's I e do Local Moran's I $\!\!^4$, também conhecido como estatística LISA *(Local Indicator of Spatial Association)*, sendo ambos utilizados como indicadores de associação espacial.
  
 ## Métodos
  
