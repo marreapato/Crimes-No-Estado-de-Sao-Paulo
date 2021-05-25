@@ -9,6 +9,7 @@ output:
 
 ## Introdução {.tabset .tabset-fade .tabset-pills}
    
+ O mapeamento da criminalidade hoje é um processo bastante conhecido do campo de análise da criminalidade, o Departamento de Polícia da Cidade de Nova York, por exemplo, rastreou o uso de mapas até pelo menos 1900 $\!\!^1$, muitos dos trabalhos desenvolvidos na área de análise espacial de crimes tem como motivação demonstrar como usar o mapeamento de crimes para ajudar as organizações policiais a planejar e obter melhores resultados na redução da criminalidade, usando o mapeamento do crime como técnica para identificar áreas de alta periculosidade, para então tentar identificar por que um crime ocorre. Apesar da segurança pública ser um dos maiores problemas da conteporaneidade. As mudanças sociais nos últimos 40 anos tornaram os métodos tradicionais de policiamento incapazes de enfrentar os novos desafios deste período $\!\!^2$.
  
  O método espacial foi calculado por meio do Global Moran's I e do Local Moran's I $\!\!^4$, também conhecido como estatística LISA *(Local Indicator of Spatial Association)*, sendo ambos utilizados como indicadores de associação espacial.
  
@@ -56,7 +57,7 @@ Já o Índice de Moran local (LISA) é calculado pela seguinte equação (**Equa
 
 [1] - Harries, K. Mapping Crime: Principle and Practice. EU.S. Department of Justice. Office of Justice Programs. National Institute of Justice. Dezembro de 1999. <https://www.ojp.gov/pdffiles1/nij/178919.pdf>
 
-[2] - Gnanasigamani, Lydia J. Hari, Seetha. (2020) Analysis of Crime Data Using Neighbourhood Rough Sets. International Journal of Information Technology and Web Engineering, 15. DOI: 10.4018/IJITWE.2020070104 
+[2] - Silva, W (2019) Crime Mapping: Using Geography to Plan Policing, 41. https://doi.org/10.4000/confins.21908 
 
 [3] -  Durlo, Raul de Sá. (2016-10-28): Análise espacial da criminalidade em uma grande metrópole: um estudo de caso para o município de São Paulo, UNESP. Disponível em: <http://hdl.handle.net/11449/144976>.
 
