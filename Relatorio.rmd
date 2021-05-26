@@ -84,7 +84,11 @@ ggplot() +
 ggplot() +
   geom_sf(data=mesos,aes(fill=mesos$name_intermediate), size=.15) +
   labs(subtitle="Mesorregiões de SP, 2019", size=8,fill="Regiões") +
-  theme_minimal() + scale_fill_stata()
+  theme_minimal() + scale_fill_stata()+theme(legend.position = "right",axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
 ```
 **Figura 1 - Mesorregiões do Estado de SP**
 
@@ -122,7 +126,7 @@ Já o Índice de Moran local (LISA) é calculado pela seguinte equação (**Equa
 ## Resultados e Discussão
 
 
-```{r,echo=FALSE, warning=FALSE,error=FALSE}
+```{r,echo=FALSE,include=FALSE, warning=FALSE,message=FALSE,error=FALSE}
 #mesorregioes
 #https://www.saopaulo.sp.gov.br/spnoticias/governo-do-estado-atualiza-classificacao-do-plano-sp-sem-regressao-de-regioes/
 #https://pt.wikipedia.org/wiki/Lista_de_mesorregi%C3%B5es_e_microrregi%C3%B5es_de_S%C3%A3o_Paulo#Mesorregi%C3%A3o_de_Bauru
@@ -200,40 +204,58 @@ mesos_sp <- dplyr::left_join(mesos, df, by = c("name_intermediate" = "Var1"))
 mesos_sp_sp <- as(mesos_sp,Class = "Spatial")
 centroids.df <- as.data.frame(coordinates(mesos_sp_sp))
 
+```
+
+
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
+
 ggplot() +
   geom_sf(data=mesos_sp,aes(fill=as.numeric(as.character(mesos_sp$soma_homi_100mil))), color="Black", size=.15) +
   scale_fill_continuous()+
-  labs(subtitle="Mesorregiões de SP", size=8,fill="Mortes por 100 mil") +
-  theme_minimal()+theme(legend.position = "right")  +
+  labs(subtitle="Mesorregiões de SP", size=8,fill="Quantidade") +
+  theme_minimal()+theme(legend.position = "right",axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())  +
   geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()
 ```
 **Figura 2 - Homicídios por 100 mil habitantes**
+ 
 
-
-
-```{r,echo=FALSE, warning=FALSE,error=FALSE}
+```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
 #mesorregioes
 
 ggplot() +
   geom_sf(data=mesos_sp,aes(fill=as.numeric(as.character(mesos_sp$furto))), color="Black", size=.15) +
   scale_fill_continuous()+
-  labs(subtitle="Mesorregiões de SP", size=8,fill="Furtos por 100 mil") +
-  theme_minimal()+theme(legend.position = "right")  +
+  labs(subtitle="Mesorregiões de SP", size=8,fill="Quantidade") +
+  theme_minimal()+theme(legend.position = "right",axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())  +
   geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()
 ```
 **Figura 3 - Furtos por 100 mil habitantes**
  
  
 
-```{r,echo=FALSE, warning=FALSE,error=FALSE}
+```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
 #mesorregioes
 
 
 ggplot() +
   geom_sf(data=mesos_sp,aes(fill=as.numeric(as.character(mesos_sp$roubo))), color="Black", size=.15) +
   scale_fill_continuous()+
-  labs(subtitle="Mesorregiões de SP", size=8,fill="Roubos por 100 mil") +
-  theme_minimal()+theme(legend.position = "right")  +
+  labs(subtitle="Mesorregiões de SP", size=8,fill="Quantidade") +
+  theme_minimal()+
+  theme_minimal()+theme(legend.position = "right",axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())  +
   geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()
 
 
@@ -242,14 +264,19 @@ ggplot() +
 
 
 
-```{r,echo=FALSE, warning=FALSE,error=FALSE}
+```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
 #mesorregioes
 
 ggplot() +
   geom_sf(data=mesos_sp,aes(fill=as.numeric(as.character(mesos_sp$furto_roubo_veic_habi))), color="Black", size=.15) +
   scale_fill_continuous()+
-  labs(subtitle="Mesorregiões de SP", size=8,fill="Furto e Roubos de Veículos por 100 mil habitantes") +
-  theme_minimal()+theme(legend.position = "right")  +
+  labs(subtitle="Mesorregiões de SP", size=8,fill="Quantidade") +
+  theme_minimal()+
+  theme_minimal()+theme(legend.position = "right",axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())  +
   geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()
 ```
 **Figura 5 - Furto e Roubos de Veículos por 100 mil habitantes**
