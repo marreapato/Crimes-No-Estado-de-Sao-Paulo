@@ -13,7 +13,7 @@ output:
  
  O estado de São Paulo é um dos mais populosos do Brasil, sendo uma das maiores metrópoles da América Latina. São Paulo, assim como os demais estados do Brasil, conta com dois tipos de corporações policiais para realizar a segurança pública em seu território, a Polícia Militar do Estado de São Paulo (PMESP), a maior polícia do Brasil e a terceira maior da América Latina em efetivo, com 138 mil militares, e a Polícia Civil do Estado de São Paulo, que exerce a função de polícia judiciária. Os dados sobre o setor de segurança pública do estado são disponibilizados pela SSPSP (Secretaria para o ano de 2019 coletados no Kaggle e com fonte principal sendo a SSPSP, os dados podem ser acessados em :(<https://www.kaggle.com/dbwaller/official-crime-data-sao-paulo-statebrazil-ssp?select=ds_SSP_CrimeRate_SP-BR_utf8_2001-2019.csv>). 
  
- O método espacial foi calculado por meio do Global Moran's I e do Local Moran's I $\!\!^4$, também conhecido como estatística LISA *(Local Indicator of Spatial Association)*, sendo ambos utilizados como indicadores de associação espacial.
+ Com o objetivo de estudar o comportamento da criminalidade no estado de São Paulo, o estado que tem 645 municípios, foi dividido em sub-regiões **(Figura - 1)**, para a realização de análises dos indíces de criminalidade em cada região, além disso foi feita a análise da dependência espacial dos crimes com infomações disponíveis no conjunto de dados, o método espacial para análise espacial foi calculado por meio do Global Moran's I e do Local Moran's I $\!\!^4$, também conhecido como estatística LISA *(Local Indicator of Spatial Association)*, sendo ambos utilizados como indicadores de associação espacial.
  
 ## Métodos
  
