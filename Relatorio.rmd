@@ -7,6 +7,70 @@ output:
   html_document: default
 ---
 
+```{r, echo=TRUE, message=FALSE, error=FALSE, results='hide',include = FALSE}
+#install.packages("tidyverse")
+#install.packages("ggthemes")
+#install.packages("readxl")
+#install.packages("maptools")
+#install.packages("sf")
+#install.packages("plotly")
+#install.packages("tmap")
+#install.packages("geobr")
+#install.packages("spdep")
+#install.packages("sf")
+#install.packages("crul")
+#install.packages("rgdal")
+library(crul)
+library(sf)
+library(spdep)
+library(geobr)
+library(tmap)
+library(plotly)
+library(tidyverse)
+library(ggthemes)
+library(readxl)
+library(rgdal)
+library(maptools)
+#geobr https://cran.r-project.org/web/packages/geobr/vignettes/intro_to_geobr.html
+
+#geobr
+datasets <- list_geobr()
+
+print(datasets, n=21)
+###################################
+#analisarei a crime_rate
+sp <- read.csv2("https://raw.githubusercontent.com/marreapato/Crimes-No-Estado-de-Sao-Paulo/main/ds_SSP_CrimeRate_SP-BR_utf8_2001-2019.csv",sep = ",")
+
+head(sp)
+
+#commas to dot
+for(i in 2:8){
+  sp[,i] <- as.numeric(gsub(",", ".", gsub("\\.", "", sp[,i])))
+}
+
+nrow(as.data.frame(table(sp$Cidade)))#645 municipios
+
+sao_p <- sp[!sp$Ano=="None",]
+
+nrow(as.data.frame(table(sao_p$Cidade)))#645 municipios porém n há dados para
+#todos
+
+sp19 <- sao_p[sao_p$Ano==2019,]
+
+nrow(as.data.frame(table(sp19$Cidade)))#645 municipios porém n há dados para
+
+#Mesorregioes#geo_br
+mesos <- read_intermediate_region(code_intermediate = "SP",year=2019)
+mesos$name_intermediate
+table(sp19$Regiao)
+
+# plot dos municípios de sp
+ggplot() +
+  geom_sf(data=mesos,aes(fill=mesos$name_intermediate), size=.15) +
+  labs(subtitle="Mesorregiões de SP, 2019", size=8,fill="Regiões") +
+  theme_minimal() + scale_fill_stata()
+
+```
 ## Introdução {.tabset .tabset-fade .tabset-pills}
    
  O mapeamento da criminalidade hoje é um processo bastante conhecido do campo de análise da criminalidade, o Departamento de Polícia da Cidade de Nova York, por exemplo, rastreou o uso de mapas até pelo menos 1900 $\!\!^1$, muitos dos trabalhos desenvolvidos na área de análise espacial de crimes tem como motivação demonstrar como usar o mapeamento de crimes para ajudar as organizações policiais a planejar e obter melhores resultados na redução da criminalidade, usando o mapeamento do crime como técnica para identificar áreas de alta periculosidade, para então tentar identificar por que um crime ocorre. Apesar da segurança pública ser um dos maiores problemas da contemporaneidade. As mudanças sociais nos últimos 40 anos tornaram os métodos tradicionais de policiamento incapazes de enfrentar os novos desafios deste período $\!\!^2$.
@@ -14,9 +78,19 @@ output:
  O estado de São Paulo é um dos mais populosos do Brasil, sendo uma das maiores metrópoles da América Latina. São Paulo, assim como os demais estados do Brasil, conta com dois tipos de corporações policiais para realizar a segurança pública em seu território, a Polícia Militar do Estado de São Paulo (PMESP), a maior polícia do Brasil e a terceira maior da América Latina em efetivo, com 138 mil militares, e a Polícia Civil do Estado de São Paulo, que exerce a função de polícia judiciária. Os dados sobre o setor de segurança pública do estado são disponibilizados pela SSPSP (Secretaria para o ano de 2019 coletados no Kaggle e com fonte principal sendo a SSPSP, os dados podem ser acessados em :(<https://www.kaggle.com/dbwaller/official-crime-data-sao-paulo-statebrazil-ssp?select=ds_SSP_CrimeRate_SP-BR_utf8_2001-2019.csv>). 
  
  Com o objetivo de estudar o comportamento da criminalidade no estado de São Paulo, o estado que tem 645 municípios, foi dividido em sub-regiões **(Figura - 1)**, para a realização de análises dos indíces de criminalidade em cada região, além disso foi feita a análise da dependência espacial dos crimes com infomações disponíveis no conjunto de dados, o método espacial para análise espacial foi calculado por meio do Global Moran's I e do Local Moran's I $\!\!^4$, também conhecido como estatística LISA *(Local Indicator of Spatial Association)*, sendo ambos utilizados como indicadores de associação espacial.
- 
+
+```{r,echo=FALSE, warning=FALSE,error=FALSE}
+# plot dos municípios de sp
+ggplot() +
+  geom_sf(data=mesos,aes(fill=mesos$name_intermediate), size=.15) +
+  labs(subtitle="Mesorregiões de SP, 2019", size=8,fill="Regiões") +
+  theme_minimal() + scale_fill_stata()
+```
+**Figura 1 - Mesorregiões do Estado de SP**
+
 ## Métodos
  
+ Para realização das análises de dependência espaacial e para criação dos mapas foi utilizado o software estatístico R (Versão 4.0.3),
 
 ### Índice de Moran
 
