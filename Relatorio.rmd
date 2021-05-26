@@ -90,7 +90,7 @@ ggplot() +
 
 ## Métodos
  
- Para realização das análises de dependência espaacial e para criação dos mapas foi utilizado o software estatístico R (Versão 4.0.3),
+ Para realização das análises de dependência espaacial e para criação dos mapas foi utilizado o software estatístico R (Versão 4.0.3), além disso como o banco utilizado tinha informações para todos os anos desde 2000 até 2019, foi necessário filtrá-lo para realizar a análise apenas para os índices a partir de 2000. No entanto é importante frisar que há algumas limitações no trabalho, visto que não há informações para todos os municípios do estado, e como foi feita a divisão em mesoregiões supõe-se que os índices para as mesorregiões estão refletidos nas informações dos municípios que estavam disponíveis em cada região.
 
 ### Índice de Moran
 
