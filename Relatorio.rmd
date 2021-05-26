@@ -119,11 +119,141 @@ Já o Índice de Moran local (LISA) é calculado pela seguinte equação (**Equa
   
   Os Boxmaps são uma representação cartográfica dos quadrantes do gráfico de dispersão de Moran, onde temos que em Seffrin, Araujo e Bazzi (2018,p.28) os valores HH e LL significam respectivamente que essas áreas possuem valores altos rodeadas por áreas que apresentam valores também altos e valores baixos da variável de interesse, rodeadas por áreas que apresentam valores baixos, o valor LH representa áreas com valor baixo rodeada de outras áreas com valores altos, já o HL é o contrário, são regiões com valores altos próximas de locais com valores baixos, as funções utilizadas para o cálculo da dependência espacial estão pesentes na bibllioteca ```spdep``` do software estatístico R (Versão 4.0.3).
   
+## Resultados e Discussão
 
-## Resultados
 
+```{r,echo=FALSE, warning=FALSE,error=FALSE}
+#mesorregioes
+#https://www.saopaulo.sp.gov.br/spnoticias/governo-do-estado-atualiza-classificacao-do-plano-sp-sem-regressao-de-regioes/
+#https://pt.wikipedia.org/wiki/Lista_de_mesorregi%C3%B5es_e_microrregi%C3%B5es_de_S%C3%A3o_Paulo#Mesorregi%C3%A3o_de_Bauru
+marilia <- c("Arco-Íris",
+             "Bastos",
+             "Herculândia",
+             "Iacri",
+             "Queiroz",
+             "Quintana",
+             "Tupã","Álvaro de Carvalho",
+             "Alvinlândia",
+             "Echaporã",
+             "Fernão",
+             "Gália",
+             "Garça",
+             "Lupércio",
+             "Marília",
+             "Ocauçu",
+             "Oriente",
+             "Oscar Bressane",
+             "Pompeia",
+             "Vera Cruz","Manduri",
+             "Óleo",
+             "Ourinhos",
+             "Piraju",
+             "Ribeirão do Sul",
+             "Salto Grande",
+             "Santa Cruz do Rio Pardo",
+             "São Pedro do Turvo",
+             "Sarutaiá",
+             "Taguaí",
+             "Tejupá",
+             "Timburi")
+
+
+
+#mudando regiao de marilia
+where <- match(sp19$Cidade,marilia)
+sp19$Cidade[!is.na(where)]
+sp19$Regiao[!is.na(where)] <-"Marília"
+
+sp19$Regiao[sp19$Cidade=="Araraquara"]="Araraquara"
+
+sp19$Regiao[sp19$Cidade=="São Carlos"]="Araraquara"
+
+sp19$Regiao[sp19$Regiao=="Capital"]="São Paulo"  
+
+sp19$Regiao[sp19$Regiao=="Santos"]="São Paulo"  
+
+sp19$Regiao[sp19$Regiao=="Piracicaba"]="Campinas"#mapa wiki
+
+sp19$Regiao[sp19$Regiao=="Grande São Paulo (exclui a Capital)"]="São Paulo" 
+
+df=as.data.frame(table(sp19$Regiao))#igual
+df$Var1
+
+soma_homi_100mil <- aggregate(as.numeric(sp19$Homicídio.Doloso.por.100.mil.habitantes),by=list(sp19$Regiao),sum)
+df$soma_homi_100mil <- soma_homi_100mil$x
+furto <- aggregate(as.numeric(sp19$Furto.por.100.mil.habitantes),by=list(sp19$Regiao),sum)
+df$furto <- furto$x
+furto <- aggregate(as.numeric(sp19$Roubo.por.100.mil.habitantes),by=list(sp19$Regiao),sum)
+df$roubo <- furto$x
+furto <- aggregate(as.numeric(sp19$Furto.e.Roubo.de.Veículo.por.100.mil.habitantes),by=list(sp19$Regiao),sum)
+df$furto_roubo_veic_habi <- furto$x
+furto <- aggregate(as.numeric(sp19$Furto.por.100.mil.veículos),by=list(sp19$Regiao),sum)
+df$furto_100mil_veic <- furto$x
+furto <- aggregate(as.numeric(sp19$Roubo.por.100.mil.veículos),by=list(sp19$Regiao),sum)
+df$roubo_100mil_veic <- furto$x
+furto <- aggregate(as.numeric(sp19$Furto.e.Roubo.de.Veículo.por.100.mil.veículos),by=list(sp19$Regiao),sum)
+df$furto_roubo_100mil_veic <- furto$x
+
+mesos_sp <- dplyr::left_join(mesos, df, by = c("name_intermediate" = "Var1"))
+
+#sf to sp
+mesos_sp_sp <- as(mesos_sp,Class = "Spatial")
+centroids.df <- as.data.frame(coordinates(mesos_sp_sp))
+
+ggplot() +
+  geom_sf(data=mesos_sp,aes(fill=as.numeric(as.character(mesos_sp$soma_homi_100mil))), color="Black", size=.15) +
+  scale_fill_continuous()+
+  labs(subtitle="Mesorregiões de SP", size=8,fill="Mortes por 100 mil") +
+  theme_minimal()+theme(legend.position = "right")  +
+  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()
+```
+**Figura 2 - Homicídios por 100 mil habitantes**
+
+
+
+```{r,echo=FALSE, warning=FALSE,error=FALSE}
+#mesorregioes
+
+ggplot() +
+  geom_sf(data=mesos_sp,aes(fill=as.numeric(as.character(mesos_sp$furto))), color="Black", size=.15) +
+  scale_fill_continuous()+
+  labs(subtitle="Mesorregiões de SP", size=8,fill="Furtos por 100 mil") +
+  theme_minimal()+theme(legend.position = "right")  +
+  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()
+```
+**Figura 3 - Furtos por 100 mil habitantes**
  
-## Discussão
+ 
+
+```{r,echo=FALSE, warning=FALSE,error=FALSE}
+#mesorregioes
+
+
+ggplot() +
+  geom_sf(data=mesos_sp,aes(fill=as.numeric(as.character(mesos_sp$roubo))), color="Black", size=.15) +
+  scale_fill_continuous()+
+  labs(subtitle="Mesorregiões de SP", size=8,fill="Roubos por 100 mil") +
+  theme_minimal()+theme(legend.position = "right")  +
+  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()
+
+
+```
+**Figura 4 - Roubos por 100 mil habitantes**
+
+
+
+```{r,echo=FALSE, warning=FALSE,error=FALSE}
+#mesorregioes
+
+ggplot() +
+  geom_sf(data=mesos_sp,aes(fill=as.numeric(as.character(mesos_sp$furto_roubo_veic_habi))), color="Black", size=.15) +
+  scale_fill_continuous()+
+  labs(subtitle="Mesorregiões de SP", size=8,fill="Furto e Roubos de Veículos por 100 mil habitantes") +
+  theme_minimal()+theme(legend.position = "right")  +
+  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()
+```
+**Figura 5 - Furto e Roubos de Veículos por 100 mil habitantes**
+
   
  
 ## Conclusão
