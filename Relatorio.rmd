@@ -125,6 +125,29 @@ Já o Índice de Moran local (LISA) é calculado pela seguinte equação (**Equa
   
 ## Resultados e Discussão
 
+## Conclusão
+
+ 
+## Bibliografia
+
+[1] - Harries, K. Mapping Crime: Principle and Practice. EU.S. Department of Justice. Office of Justice Programs. National Institute of Justice. Dezembro de 1999. <https://www.ojp.gov/pdffiles1/nij/178919.pdf>
+
+[2] - Silva, W (2019) Crime Mapping: Using Geography to Plan Policing, 41. https://doi.org/10.4000/confins.21908 
+
+[3] -  Durlo, Raul de Sá. (2016-10-28): Análise espacial da criminalidade em uma grande metrópole: um estudo de caso para o município de São Paulo, UNESP. Disponível em: <http://hdl.handle.net/11449/144976>.
+
+[4] -CARDOSO, Carlos Eduardo de Paiva. Dependência Espacial, Setores Censitários, Zonas OD, Distritos, Sub Prefeituras e etc. [S.l]. Publicado em: 06/09/2007. <http://www.sinaldetransito.com.br/artigos/espacial.pdf>. Acesso em: 24/11/2020.
+
+[5] - BRAGA, Altemir da Silva.*et al*. Estudo de Dependência Espacial utilizando Análise de Dados de Área Aplicada na Mesorregião Metropolitana de Belo Horizonte por meio do Indicador Econômico PIB. 19ª SINAPE.  [S.l.]. 2010,  Disponível em: <http://www2.ime.unicamp.br/sinape/sites/default/files/Resumo%20expandido%20SINAPE.pdf>. Acesso em: 24/11/2020.
+
+[6] - MAIA, André Luis Santiago; GOMES, Gecynalda Soares da Silva; ALMEIDA, Isabelle Galdino de. SPATIAL STUDY OF INCIDENCE RATES OF OCCUPATIONAL ACCIDENTS IN BRAZIL FROM 2002 TO 2012. REVISTA BRASILEIRA DE BIOMETRIA, [S.l.], v. 36, n. 4, p. 927-941, dec. 2018. ISSN 1983-0823. Available at: <http://www.biometria.ufla.br/index.php/BBJ/article/view/322>. Date accessed: 24 nov. 2020. doi: https://doi.org/10.28951/rbb.v36i4.322.    
+
+[7] - SEFFRIN, R.; ARAUJO, E. C.; BAZZI, C. L.. Análise espacial de área aplicada a produtividade de soja na região oeste do Paraná utilizando o software R. R. bras. Geom., Curitiba, v. 6, n. 1, p. 23-43, jan/mar.2018. Disponível em: <https://periodicos.utfpr.edu.br/rbgeo/article/view/5912>. Acesso em: 24/11/2020.DOI: 10.3895/rbgeo.v6n1.5912
+
+
+## Anexo
+
+### A1
 
 ```{r,echo=FALSE,include=FALSE, warning=FALSE,message=FALSE,error=FALSE}
 #mesorregioes
@@ -208,6 +231,7 @@ centroids.df <- as.data.frame(coordinates(mesos_sp_sp))
 
 
 
+### A2
 ```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
 
 ggplot() +
@@ -224,6 +248,7 @@ ggplot() +
 **Figura 2 - Homicídios por 100 mil habitantes**
  
 
+### A3
 ```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
 #mesorregioes
 
@@ -241,7 +266,7 @@ ggplot() +
 **Figura 3 - Furtos por 100 mil habitantes**
  
  
-
+### A4
 ```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
 #mesorregioes
 
@@ -263,7 +288,7 @@ ggplot() +
 **Figura 4 - Roubos por 100 mil habitantes**
 
 
-
+### A5
 ```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
 #mesorregioes
 
@@ -283,7 +308,7 @@ ggplot() +
 
   
 
-```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
+```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE,include=FALSE}
 #mesorregioes
 #moran using sp object
 coor <- coordinates(mesos_sp_sp)
@@ -312,31 +337,16 @@ mesos_sp_sp$lmi.p<-local.mi.prod[,5]
 mesos_sp_sp$lmi.p.sig<-as.factor(ifelse(local.mi.prod[,5]<.001,"Sig p<.001",
                                         ifelse(local.mi.prod[,5]<.05,"Sig p<.05", "NS" )))
 
-#require("RColorBrewer")
+```
 
-#require("sp")
+ 
+### A6 
+```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
+#mesorregioes
 
-spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), main = "Homicidios Por 100 Mil")
+spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), main = "Homicídios Por 100 Mil")
 
 
 ```
-**Figura 5 - Furto e Roubos de Veículos por 100 mil habitantes**
+**Figura 6 - Índice local de Moran em homicídios 100 mil habitantes**
  
-## Conclusão
-
- 
-## Bibliografia
-
-[1] - Harries, K. Mapping Crime: Principle and Practice. EU.S. Department of Justice. Office of Justice Programs. National Institute of Justice. Dezembro de 1999. <https://www.ojp.gov/pdffiles1/nij/178919.pdf>
-
-[2] - Silva, W (2019) Crime Mapping: Using Geography to Plan Policing, 41. https://doi.org/10.4000/confins.21908 
-
-[3] -  Durlo, Raul de Sá. (2016-10-28): Análise espacial da criminalidade em uma grande metrópole: um estudo de caso para o município de São Paulo, UNESP. Disponível em: <http://hdl.handle.net/11449/144976>.
-
-[4] -CARDOSO, Carlos Eduardo de Paiva. Dependência Espacial, Setores Censitários, Zonas OD, Distritos, Sub Prefeituras e etc. [S.l]. Publicado em: 06/09/2007. <http://www.sinaldetransito.com.br/artigos/espacial.pdf>. Acesso em: 24/11/2020.
-
-[5] - BRAGA, Altemir da Silva.*et al*. Estudo de Dependência Espacial utilizando Análise de Dados de Área Aplicada na Mesorregião Metropolitana de Belo Horizonte por meio do Indicador Econômico PIB. 19ª SINAPE.  [S.l.]. 2010,  Disponível em: <http://www2.ime.unicamp.br/sinape/sites/default/files/Resumo%20expandido%20SINAPE.pdf>. Acesso em: 24/11/2020.
-
-[6] - MAIA, André Luis Santiago; GOMES, Gecynalda Soares da Silva; ALMEIDA, Isabelle Galdino de. SPATIAL STUDY OF INCIDENCE RATES OF OCCUPATIONAL ACCIDENTS IN BRAZIL FROM 2002 TO 2012. REVISTA BRASILEIRA DE BIOMETRIA, [S.l.], v. 36, n. 4, p. 927-941, dec. 2018. ISSN 1983-0823. Available at: <http://www.biometria.ufla.br/index.php/BBJ/article/view/322>. Date accessed: 24 nov. 2020. doi: https://doi.org/10.28951/rbb.v36i4.322.    
-
-[7] - SEFFRIN, R.; ARAUJO, E. C.; BAZZI, C. L.. Análise espacial de área aplicada a produtividade de soja na região oeste do Paraná utilizando o software R. R. bras. Geom., Curitiba, v. 6, n. 1, p. 23-43, jan/mar.2018. Disponível em: <https://periodicos.utfpr.edu.br/rbgeo/article/view/5912>. Acesso em: 24/11/2020.DOI: 10.3895/rbgeo.v6n1.5912
