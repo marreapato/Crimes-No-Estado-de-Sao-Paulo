@@ -147,8 +147,6 @@ Já o Índice de Moran local (LISA) é calculado pela seguinte equação (**Equa
 
 ## Anexo
 
-### A1
-
 ```{r,echo=FALSE,include=FALSE, warning=FALSE,message=FALSE,error=FALSE}
 #mesorregioes
 #https://www.saopaulo.sp.gov.br/spnoticias/governo-do-estado-atualiza-classificacao-do-plano-sp-sem-regressao-de-regioes/
@@ -231,7 +229,7 @@ centroids.df <- as.data.frame(coordinates(mesos_sp_sp))
 
 
 
-### A2
+### A1
 ```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
 
 ggplot() +
@@ -245,10 +243,10 @@ ggplot() +
         axis.ticks.y=element_blank())  +
   geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()
 ```
-**Figura 2 - Homicídios por 100 mil habitantes**
+**Homicídios por 100 mil habitantes**
  
 
-### A3
+### A2
 ```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
 #mesorregioes
 
@@ -263,10 +261,10 @@ ggplot() +
         axis.ticks.y=element_blank())  +
   geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()
 ```
-**Figura 3 - Furtos por 100 mil habitantes**
+**Furtos por 100 mil habitantes**
  
  
-### A4
+### A3
 ```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
 #mesorregioes
 
@@ -285,10 +283,10 @@ ggplot() +
 
 
 ```
-**Figura 4 - Roubos por 100 mil habitantes**
+**Roubos por 100 mil habitantes**
 
 
-### A5
+### A4
 ```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
 #mesorregioes
 
@@ -304,7 +302,7 @@ ggplot() +
         axis.ticks.y=element_blank())  +
   geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()
 ```
-**Figura 5 - Furto e Roubos de Veículos por 100 mil habitantes**
+**Furto e Roubos de Veículos por 100 mil habitantes**
 
   
 
@@ -340,7 +338,7 @@ mesos_sp_sp$lmi.p.sig<-as.factor(ifelse(local.mi.prod[,5]<.001,"Sig p<.001",
 ```
 
  
-### A6 
+### A5 
 ```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
 #mesorregioes
 
@@ -348,5 +346,5 @@ spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), ma
 
 
 ```
-**Figura 6 - Índice local de Moran em homicídios 100 mil habitantes**
+**Índice local de Moran em homicídios 100 mil habitantes**
  
