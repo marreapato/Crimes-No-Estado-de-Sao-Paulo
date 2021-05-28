@@ -94,7 +94,7 @@ ggplot() +
 
 ## Métodos
  
- Para realização das análises de dependência espaacial e para criação dos mapas foi utilizado o software estatístico R (Versão 4.0.3), além disso como o banco utilizado tinha informações para todos os anos desde 2000 até 2019, foi necessário filtrá-lo para realizar a análise apenas para os índices a partir de 2000. No entanto é importante frisar que há algumas limitações no trabalho, visto que não há informações para todos os municípios do estado, e como foi feita a divisão em mesoregiões supõe-se que os índices para as mesorregiões estão refletidos nas informações dos municípios que estavam disponíveis em cada região.
+ Para realização das análises de dependência espaacial e para criação dos mapas foi utilizado o software estatístico R (Versão 4.0.3), além disso como o banco utilizado tinha informações para todos os anos desde 2000 até 2019, foi necessário filtrá-lo para realizar a análise apenas para os índices a partir de 2000. Decidimos também por apenas representar visualmente os índices de criminalidade das variáveis que atingissem um índice Global de Moran ($Im\geq0.30$), ou que fossem categorizados por 100 mil habitantes, os mapas de correlação local apenas foram feitos para os índices que atingissem ($Im\geq0.30$). No entanto é importante frisar que há algumas limitações no trabalho, visto que não há informações para todos os municípios do estado, e como foi feita a divisão em mesoregiões supõe-se que os índices para as mesorregiões estão refletidos nas informações dos municípios que estavam disponíveis em cada região, além disso não disponibilizamos os boxmaps para a análise neste trabalho, apesar disso todos os clusters identificados como significativos pelo *LISA* foram classificados como HH (Alto-Alto).
 
 ### Índice de Moran
 
@@ -412,6 +412,41 @@ spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), ma
 
 ```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE,include=FALSE}
 
+#roubos 100 mil
+#death_pop
+moran.plot(mesos_sp_sp$furto_roubo_veic_habi, PPV3.w, zero.policy=TRUE)
+moran.test(mesos_sp_sp$furto_roubo_veic_habi,PPV3.w,zero.policy = TRUE,na.action = na.omit)
+moran.mc(nsim=10000,mesos_sp_sp$furto_roubo_veic_habi,PPV3.w,zero.policy = TRUE,na.action = na.omit)
+
+#monthly death pop local
+local.mi.prod<-localmoran(mesos_sp_sp$furto_roubo_veic_habi, PPV3.w)
+
+mesos_sp_sp$lmi<-local.mi.prod[,1]
+
+mesos_sp_sp$lmi.p<-local.mi.prod[,5]
+
+mesos_sp_sp$lmi.p.sig<-as.factor(ifelse(local.mi.prod[,5]<.001,"Sig p<.001",
+                                        ifelse(local.mi.prod[,5]<.05,"Sig p<.05", "NS" )))
+
+#require("RColorBrewer")
+
+#require("sp")
+
+```
+
+
+### A8
+```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
+#mesorregioes
+
+spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), main = "Furto e Roubo de Veículos 100 mil habitantes")
+
+```
+**Furto e Roubo de Veículos 100 mil habitantes**
+
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE,include=FALSE}
+
 #FURTO 100 MIL VEIC
 #death_pop
 moran.plot(mesos_sp_sp$furto_100mil_veic, PPV3.w, zero.policy=TRUE)
@@ -434,7 +469,7 @@ mesos_sp_sp$lmi.p.sig<-as.factor(ifelse(local.mi.prod[,5]<.001,"Sig p<.001",
 ```
 
 
-### A8
+### A9
 ```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
 #mesorregioes
 
