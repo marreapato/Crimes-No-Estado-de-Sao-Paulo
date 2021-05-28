@@ -125,6 +125,18 @@ Já o Índice de Moran local (LISA) é calculado pela seguinte equação (**Equa
   
 ## Resultados e Discussão
 
+
+### Tabela 1 - Índice de Moran Global sobre a quantidade de crimes.
+```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
+
+Tabela <- data.frame("Crime"=c("Homicídios 100 mil habitantes","Furtos 100 mil habitantes","Roubos 100 mil habitantes","Furto e Roubo de Veículos 100 mil habitantes","Furto 100 mil Veículos","Roubo 100 mil Veículos","Furto e Roubo 100 mil Veículos"),"Moran Global"=c("0.62503","0.44878","0.14602","0.32681","0.31235","0.096276","0.22639"),"P-valor (Monte-Carlo)"=c("<0.0001","0.0014","0.0132","0.00969","0.00519","0.0253","0.0124"))
+
+#mesorregioes
+
+```
+**Furtos por 100 mil habitantes**
+ 
+
 ## Conclusão
 
  
