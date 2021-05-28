@@ -383,3 +383,5 @@ spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), ma
 
 ```
 **Índice local de Moran em furtos 100 mil habitantes**
+
+
