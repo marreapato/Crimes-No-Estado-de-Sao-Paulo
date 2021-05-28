@@ -160,14 +160,24 @@ ggplot() +
   scale_fill_continuous()+
   labs(subtitle="Mesorregiões de SP", size=8,fill="Furtos por 100 mil") +
   theme_minimal()+theme(legend.position = "right")  +
-  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()
+  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()+theme(legend.position = "right",axis.title.x=element_blank(),
+                                                                                                                             axis.text.x=element_blank(),
+                                                                                                                             axis.ticks.x=element_blank(),axis.title.y=element_blank(),
+                                                                                                                             axis.text.y=element_blank(),
+                                                                                                                             axis.ticks.y=element_blank())
 
 ggplot() +
   geom_sf(data=mesos_sp,aes(fill=as.numeric(as.character(mesos_sp$roubo))), color="Black", size=.15) +
   scale_fill_continuous()+
   labs(subtitle="Mesorregiões de SP", size=8,fill="Roubos por 100 mil") +
   theme_minimal()+theme(legend.position = "right")  +
-  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()
+  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()+theme(legend.position = "right",axis.title.x=element_blank(),
+                                                                                                                             axis.text.x=element_blank(),
+                                                                                                                             axis.ticks.x=element_blank(),axis.title.y=element_blank(),
+                                                                                                                             axis.text.y=element_blank(),
+                                                                                                                             axis.ticks.y=element_blank())
+
+
 
 
 ggplot() +
@@ -175,7 +185,13 @@ ggplot() +
   scale_fill_continuous()+
   labs(subtitle="Mesorregiões de SP", size=8,fill="Furto e Roubos de Veículos por 100 mil") +
   theme_minimal()+theme(legend.position = "right")  +
-  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()
+  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()+theme(legend.position = "right",axis.title.x=element_blank(),
+                                                                                                                             axis.text.x=element_blank(),
+                                                                                                                             axis.ticks.x=element_blank(),axis.title.y=element_blank(),
+                                                                                                                             axis.text.y=element_blank(),
+                                                                                                                             axis.ticks.y=element_blank())
+
+
 
 
 
@@ -184,7 +200,13 @@ ggplot() +
   scale_fill_continuous()+
   labs(subtitle="Mesorregiões de SP", size=8,fill="Furto por 100 mil Veículos") +
   theme_minimal()+theme(legend.position = "right")  +
-  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()
+  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()+theme(legend.position = "right",axis.title.x=element_blank(),
+                                                                                                                             axis.text.x=element_blank(),
+                                                                                                                             axis.ticks.x=element_blank(),axis.title.y=element_blank(),
+                                                                                                                             axis.text.y=element_blank(),
+                                                                                                                             axis.ticks.y=element_blank())
+
+
 
 
 ggplot() +
@@ -192,7 +214,13 @@ ggplot() +
   scale_fill_continuous()+
   labs(subtitle="Mesorregiões de SP", size=8,fill="Roubo por 100 mil Veículos") +
   theme_minimal()+theme(legend.position = "right")  +
-  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()
+  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()+theme(legend.position = "right",axis.title.x=element_blank(),
+                                                                                                                             axis.text.x=element_blank(),
+                                                                                                                             axis.ticks.x=element_blank(),axis.title.y=element_blank(),
+                                                                                                                             axis.text.y=element_blank(),
+                                                                                                                             axis.ticks.y=element_blank())
+
+
 
 
 ggplot() +
@@ -200,7 +228,13 @@ ggplot() +
   scale_fill_continuous()+
   labs(subtitle="Mesorregiões de SP", size=8,fill="Furto e Roubo por 100 mil Veículos") +
   theme_minimal()+theme(legend.position = "right")  + scale_fill_viridis_c()+
-  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))
+  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+theme(legend.position = "right",axis.title.x=element_blank(),
+                                                                                                     axis.text.x=element_blank(),
+                                                                                                     axis.ticks.x=element_blank(),axis.title.y=element_blank(),
+                                                                                                     axis.text.y=element_blank(),
+                                                                                                     axis.ticks.y=element_blank())
+
+
 
 
 
@@ -321,7 +355,7 @@ mesos_sp_sp$quad <- quadrant
     geom_sf(aes(fill = mesos_sp_sp$quad)) +
     scale_fill_manual(values=c("red","blue"))+theme(legend.position ="bottom",legend.title=element_text(size=14),legend.text=element_text(size=15),legend.direction = "horizontal",
                                                     axis.ticks.x=element_blank(), axis.text.x=element_blank())+
-    labs(title = "Homicidios por 100 mil em 2019",fill="Cluster"))
+    labs(title = "Furtos por 100 mil em 2019",fill="Cluster"))
 
 
 
@@ -345,7 +379,7 @@ mesos_sp_sp$lmi.p.sig<-as.factor(ifelse(local.mi.prod[,5]<.001,"Sig p<.001",
 
 #require("sp")
 
-spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), main = "Homicidios")
+spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), main = "Roubos")
 
 #validated
 
@@ -376,7 +410,7 @@ mesos_sp_sp$quad <- quadrant
     geom_sf(aes(fill = mesos_sp_sp$quad)) +
     scale_fill_manual(values=c("red","blue"))+theme(legend.position ="bottom",legend.title=element_text(size=14),legend.text=element_text(size=15),legend.direction = "horizontal",
                                                     axis.ticks.x=element_blank(), axis.text.x=element_blank())+
-    labs(title = "Homicidios por 100 mil em 2019",fill="Cluster"))
+    labs(title = "Roubos por 100 mil em 2019",fill="Cluster"))
 
 #roubos 100 mil
 #death_pop
@@ -398,7 +432,7 @@ mesos_sp_sp$lmi.p.sig<-as.factor(ifelse(local.mi.prod[,5]<.001,"Sig p<.001",
 
 #require("sp")
 
-spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), main = "Homicidios")
+spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), main = "Furto e Roubo de Veículos 100 mil")
 
 #validated
 
@@ -429,9 +463,9 @@ mesos_sp_sp$quad <- quadrant
     geom_sf(aes(fill = mesos_sp_sp$quad)) +
     scale_fill_manual(values=c("red","blue"))+theme(legend.position ="bottom",legend.title=element_text(size=14),legend.text=element_text(size=15),legend.direction = "horizontal",
                                                     axis.ticks.x=element_blank(), axis.text.x=element_blank())+
-    labs(title = "Homicidios por 100 mil em 2019",fill="Cluster"))
+    labs(title = "Furto e Roubo de Veículos 100 mil",fill="Cluster"))
 
-#roubos 100 mil
+#FURTO 100 MIL VEIC
 #death_pop
 moran.plot(mesos_sp_sp$furto_100mil_veic, PPV3.w, zero.policy=TRUE)
 moran.test(mesos_sp_sp$furto_100mil_veic,PPV3.w,zero.policy = TRUE,na.action = na.omit)
@@ -451,7 +485,7 @@ mesos_sp_sp$lmi.p.sig<-as.factor(ifelse(local.mi.prod[,5]<.001,"Sig p<.001",
 
 #require("sp")
 
-spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), main = "Homicidios")
+spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), main = "Furto 100 mil Veículos")
 
 #validated
 
@@ -482,7 +516,7 @@ mesos_sp_sp$quad <- quadrant
     geom_sf(aes(fill = mesos_sp_sp$quad)) +
     scale_fill_manual(values=c("red","blue"))+theme(legend.position ="bottom",legend.title=element_text(size=14),legend.text=element_text(size=15),legend.direction = "horizontal",
                                                     axis.ticks.x=element_blank(), axis.text.x=element_blank())+
-    labs(title = "Homicidios por 100 mil em 2019",fill="Cluster"))
+    labs(title = "Furtos por 100 mil Veículos em 2019",fill="Cluster"))
 
 #roubos 100 mil
 #death_pop
