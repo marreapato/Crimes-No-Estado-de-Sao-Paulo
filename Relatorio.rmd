@@ -304,6 +304,31 @@ ggplot() +
 ```
 **Furto e Roubos de Veículos por 100 mil habitantes**
 
+
+ 
+### A5
+```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
+#mesorregioes
+
+
+ggplot() +
+  geom_sf(data=mesos_sp,aes(fill=as.numeric(as.character(mesos_sp$furto_100mil_veic))), color="Black", size=.15) +
+  scale_fill_continuous()+
+  labs(subtitle="Mesorregiões de SP", size=8,fill="Furto por 100 mil Veículos") +
+  theme_minimal()+theme(legend.position = "right")  +
+  geom_text(aes(label = mesos_sp$name_intermediate, x = centroids.df$V1, y = centroids.df$V2))+ scale_fill_viridis_c()+theme(legend.position = "right",axis.title.x=element_blank(),
+                                                                                                                             axis.text.x=element_blank(),
+                                                                                                                             axis.ticks.x=element_blank(),axis.title.y=element_blank(),
+                                                                                                                             axis.text.y=element_blank(),
+                                                                                                                             axis.ticks.y=element_blank())
+
+
+
+
+
+
+```
+**Furtos por 100 mil veículos**
   
 
 ```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE,include=FALSE}
@@ -338,7 +363,7 @@ mesos_sp_sp$lmi.p.sig<-as.factor(ifelse(local.mi.prod[,5]<.001,"Sig p<.001",
 ```
 
  
-### A5 
+### A6 
 ```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
 #mesorregioes
 
@@ -374,7 +399,7 @@ mesos_sp_sp$lmi.p.sig<-as.factor(ifelse(local.mi.prod[,5]<.001,"Sig p<.001",
 
 ```
 
-### A6
+### A7
 ```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
 #mesorregioes
 
@@ -385,3 +410,35 @@ spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), ma
 **Índice local de Moran em furtos 100 mil habitantes**
 
 
+```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE,include=FALSE}
+
+#FURTO 100 MIL VEIC
+#death_pop
+moran.plot(mesos_sp_sp$furto_100mil_veic, PPV3.w, zero.policy=TRUE)
+moran.test(mesos_sp_sp$furto_100mil_veic,PPV3.w,zero.policy = TRUE,na.action = na.omit)
+moran.mc(nsim=10000,mesos_sp_sp$furto_100mil_veic,PPV3.w,zero.policy = TRUE,na.action = na.omit)
+
+#monthly death pop local
+local.mi.prod<-localmoran(mesos_sp_sp$furto_100mil_veic, PPV3.w)
+
+mesos_sp_sp$lmi<-local.mi.prod[,1]
+
+mesos_sp_sp$lmi.p<-local.mi.prod[,5]
+
+mesos_sp_sp$lmi.p.sig<-as.factor(ifelse(local.mi.prod[,5]<.001,"Sig p<.001",
+                                        ifelse(local.mi.prod[,5]<.05,"Sig p<.05", "NS" )))
+
+#require("RColorBrewer")
+
+#require("sp")
+```
+
+
+### A8
+```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
+#mesorregioes
+
+spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), main = "Furto 100 mil Veículos")
+
+```
+**Índice local de Moran em furtos 100 mil veículos**
