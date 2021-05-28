@@ -125,6 +125,7 @@ Já o Índice de Moran local (LISA) é calculado pela seguinte equação (**Equa
   
 ## Resultados e Discussão
 
+ O Índice Global de Moran foi alto para o número de homicídios por 100 mil habitantes, indicando que há um nível de dependência espacial para a ocorrência deste crime no estado.
 
 ### Tabela 1 - Índice de Moran Global sobre a quantidade de crimes.
 ```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
