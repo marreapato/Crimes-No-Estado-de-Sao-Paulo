@@ -348,3 +348,38 @@ spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), ma
 ```
 **Índice local de Moran em homicídios 100 mil habitantes**
  
+
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE,include=FALSE}
+
+#furtos 100 mil
+#death_pop
+moran.plot(mesos_sp_sp$furto, PPV3.w, zero.policy=TRUE)
+moran.test(mesos_sp_sp$furto,PPV3.w,zero.policy = TRUE,na.action = na.omit)
+moran.mc(nsim=10000,mesos_sp_sp$furto,PPV3.w,zero.policy = TRUE,na.action = na.omit)
+
+#monthly death pop local
+local.mi.prod<-localmoran(mesos_sp_sp$furto, PPV3.w)
+
+mesos_sp_sp$lmi<-local.mi.prod[,1]
+
+mesos_sp_sp$lmi.p<-local.mi.prod[,5]
+
+mesos_sp_sp$lmi.p.sig<-as.factor(ifelse(local.mi.prod[,5]<.001,"Sig p<.001",
+                                        ifelse(local.mi.prod[,5]<.05,"Sig p<.05", "NS" )))
+
+#require("RColorBrewer")
+
+#require("sp")
+
+```
+
+### A6
+```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
+#mesorregioes
+
+
+spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), main = "Furtos")
+
+```
+**Índice local de Moran em furtos 100 mil habitantes**
