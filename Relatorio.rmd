@@ -136,8 +136,6 @@ colnames(Tabela) <- c("Crime","Moran Global","P-valor (Monte-Carlo)")
 #mesorregioes
 knitr::kable(Tabela)
 ```
-**Furtos por 100 mil habitantes**
- 
 
 ## Conclusão
 
