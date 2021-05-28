@@ -32,6 +32,7 @@ print(datasets, n=21)
 sp <- read.csv2("https://raw.githubusercontent.com/marreapato/Crimes-No-Estado-de-Sao-Paulo/main/ds_SSP_CrimeRate_SP-BR_utf8_2001-2019.csv",sep = ",")
 
 head(sp)
+names(sp)
 
 #commas to dot
 for(i in 2:8){
@@ -289,7 +290,7 @@ mesos_sp_sp$lmi.p.sig<-as.factor(ifelse(local.mi.prod[,5]<.001,"Sig p<.001",
 
 #require("sp")
 
-spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), main = "Homicidios")
+spplot(mesos_sp_sp, "lmi.p.sig", col.regions=c("white", "#E6550D","#FDAE6B"), main = "Furtos")
 
 #validated
 
@@ -533,7 +534,7 @@ mesos_sp_sp$quad <- quadrant
 (aug <- ggplot(data = mesos_sp) +
     geom_sf(aes(fill = mesos_sp_sp$quad)) +
     scale_fill_manual(values=c("red","lightblue","blue"))+theme(legend.position ="bottom",legend.title=element_text(size=14),legend.text=element_text(size=15),legend.direction = "horizontal",
-                                                    axis.ticks.x=element_blank(), axis.text.x=element_blank())+
+                                                                axis.ticks.x=element_blank(), axis.text.x=element_blank())+
     labs(title = "Homicidios por 100 mil em 2019",fill="Cluster"))
 
 #roubos 100 mil
