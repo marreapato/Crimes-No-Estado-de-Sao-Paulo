@@ -125,8 +125,10 @@ Já o Índice de Moran local (LISA) é calculado pela seguinte equação (**Equa
   
 ## Resultados e Discussão
 
- O Índice Global de Moran **(Tabela 1)** foi alto($Im \geq 0.60$) para o número de homicídios por 100 mil habitantes, indicando que há um nível de dependência espacial para a ocorrência deste crime no estado, ou seja existem aglomerados para a ocorrência deste crime dentre as regiões da Unidade Federativa, de fato a ocorrência de homicídios por 100 mil habitantes no estado **(Anexo A1)** é maior nas regiões de Campinas, São Paulo, Sorocaba e São José dos Campos, os conglomerados identificados pelo *LISA* foram São Paulo, São José dos Campos e Campinas.
-
+ O Índice Global de Moran **(Tabela 1)** foi alto($Im \geq 0.60$) para o número de homicídios por 100 mil habitantes, indicando que há um nível de dependência espacial para a ocorrência deste crime no estado, ou seja existem aglomerados para a ocorrência deste crime dentre as regiões da Unidade Federativa, de fato a ocorrência de homicídios por 100 mil habitantes no estado **(Anexo A1)** é maior nas regiões de Campinas, São Paulo, Sorocaba e São José dos Campos, os conglomerados identificados pelo *LISA* foram São Paulo, São José dos Campos e Campinas. 
+ 
+ Sobre o índice de furtos por 100 mil habitantes a dependência espacial foi moderadamente alta ($Im \simeq 0.45$), sendo que para o Índice observado em 2019 os mesmos *clusters* para a quantidade de homicídios foram identificados, o índice espacial local de Moran identificou São Paulo e Campinas como *clusters* de furtos por 100 mil habitantes. Para a quantidade de furtos e roubos por 100 mil habitantes
+ 
 ### Tabela 1 - Índice de Moran Global sobre a quantidade de crimes.
 ```{r,echo=FALSE,message=FALSE, warning=FALSE,error=FALSE}
 
