@@ -5,7 +5,6 @@ author: "Lucas Rabelo"
 abstract: "Muitos dos trabalhos desenvolvidos na área de análise espacial de crimes tem como motivação demonstrar como usar o mapeamento da criminalidade para ajudar as organizações policiais a planejar e obter melhores resultados na redução da criminalidade. O estado de São Paulo é um dos mais populosos do Brasil, sendo uma das maiores metrópoles da América Latina. Os dados sobre o setor de segurança pública do estado são disponibilizados pela SSPSP (Secretaria De Segurança Pública de São Paulo). Com o objetivo de estudar o comportamento da criminalidade no estado de São Paulo, foi feita a análise da dependência espacial dos crimes com informações disponíveis no conjunto de dados, utilizando o Global Moran's I e o Local Moran's I, esses índices dão uma visão geral e local de como combater o aumento dos índices criminais de artigo 121, 155 e 157 (respectivamente homicídio, furto e roubo) em todo o estado de São Paulo."
 output:
   pdf_document: default
-  html_document: default
 ---
 
 ```{r, echo=TRUE, message=FALSE, error=FALSE, results='hide',include = FALSE}
@@ -72,7 +71,7 @@ ggplot() +
   theme_minimal() + scale_fill_stata()
 
 ```
-## Introdução {.tabset .tabset-fade .tabset-pills}
+## 1 - Introdução {.tabset .tabset-fade .tabset-pills}
    
  O mapeamento da violência hoje é um processo bastante conhecido do campo de análise da criminalidade, o Departamento de Polícia da Cidade de Nova York, por exemplo, rastreou o uso de mapas até pelo menos o ano 1900 $\!\!^1$, muitos dos trabalhos desenvolvidos na área de análise espacial de crimes tem como motivação demonstrar como usar o mapeamento da criminalidade para ajudar as organizações policiais a planejar e obter melhores resultados na redução da criminalidade, usando o mapeamento do crime como técnica para identificar áreas de alta periculosidade, para então tentar identificar por que um crime ocorre. As mudanças sociais nos últimos 40 anos tornaram os métodos tradicionais de policiamento incapazes de enfrentar os novos desafios deste período $\!\!^2$.
  
@@ -93,9 +92,12 @@ ggplot() +
 ```
 **Figura 1 - Mesorregiões do Estado de SP**
 
-## Métodos
+## 2 - Métodos
  
- Para realização das análises de dependência espaacial e para criação dos mapas foi utilizado o software estatístico R (Versão 4.0.3), além disso como o banco utilizado tinha informações para todos os anos desde 2000 até 2019, foi necessário filtrá-lo para realizar a análise apenas para os índices a partir de 2000. Decidimos também por apenas representar visualmente os índices de criminalidade das variáveis que atingissem um índice Global de Moran ($Im\geq0.30$), ou que fossem categorizados por 100 mil habitantes, os mapas de correlação local apenas foram feitos para os índices que atingissem ($Im\geq0.30$). No entanto é importante frisar que há algumas limitações no trabalho, visto que não há informações para todos os municípios do estado, e como foi feita a divisão em mesoregiões supõe-se que os índices para as mesorregiões estão refletidos nas informações dos municípios que estavam disponíveis em cada região, além disso não disponibilizamos os boxmaps para a análise neste trabalho, apesar disso todos os clusters identificados como significativos pelo *LISA* foram classificados como HH (Alto-Alto).
+ 
+### Banco de Dados e Limitações
+
+ Para realização das análises de dependência espacial e para criação dos mapas foi utilizado o software estatístico R (Versão 4.0.3), além disso como o banco utilizado tinha informações para todos os anos desde 2000 até 2019, foi necessário filtrá-lo para realizar a análise apenas para os índices a partir de 2000. Decidimos também por apenas representar visualmente os índices de criminalidade das variáveis que atingissem um índice Global de Moran ($Im\geq0.30$), ou que fossem categorizados por 100 mil habitantes, os mapas de correlação local apenas foram feitos para os índices que atingissem ($Im\geq0.30$). No entanto é importante frisar que há algumas limitações no trabalho, visto que não há informações para todos os municípios do estado, e como foi feita a divisão em mesorregiões supõe-se que os índices para as mesorregiões estão refletidos nas informações dos municípios que estavam disponíveis em cada região, além disso não disponibilizamos os boxmaps para a análise neste trabalho, apesar disso todos os clusters identificados como significativos pelo *LISA* foram classificados como HH (Alto-Alto).
 
 ### Índice de Moran
 
@@ -124,7 +126,7 @@ Já o Índice de Moran local (LISA) é calculado pela seguinte equação (**Equa
   
   Os Boxmaps são uma representação cartográfica dos quadrantes do gráfico de dispersão de Moran, onde temos que em Seffrin, Araujo e Bazzi (2018,p.28) os valores HH e LL significam respectivamente que essas áreas possuem valores altos rodeadas por áreas que apresentam valores também altos e valores baixos da variável de interesse, rodeadas por áreas que apresentam valores baixos, o valor LH representa áreas com valor baixo rodeada de outras áreas com valores altos, já o HL é o contrário, são regiões com valores altos próximas de locais com valores baixos, as funções utilizadas para o cálculo da dependência espacial estão pesentes na bibllioteca ```spdep``` do software estatístico R (Versão 4.0.3).
   
-## Resultados e Discussão
+## 3 - Resultados e Discussão
 
  O Índice Global de Moran **(Tabela 1)** foi alto($Im \geq 0.60$) para o número de homicídios por 100 mil habitantes, indicando que há um nível de dependência espacial para a ocorrência deste crime no estado, ou seja existem aglomerados para a ocorrência deste crime dentre as regiões da Unidade Federativa, de fato a ocorrência de homicídios por 100 mil habitantes no estado **(Anexo A1)** é maior nas regiões de Campinas, São Paulo, Sorocaba e São José dos Campos, os conglomerados identificados pelo *LISA* **(Anexo A6)** foram São Paulo, São José dos Campos e Campinas. 
  
@@ -145,7 +147,7 @@ colnames(Tabela) <- c("Crime","Moran Global","P-valor (Monte-Carlo)")
 knitr::kable(Tabela)
 ```
 
-## Conclusão
+## 4 - Conclusão
 
  De fato muitas intituições governamentais e até a experiência de cidadãos de outras unidades federativas os fazem considerar o estado de São Paulo, um dos mais seguros do país, segundo uma notícia do próprio governo de São Paulo, com um artigo postado em 06/08/2019 em (https://www.saopaulo.sp.gov.br/spnoticias/das-20-cidades-menos-violentas-do-pais-14-estao-em-sao-paulo/), das 20 cidades menos violentas do país 14 estão em São Paulo, porém apesar disso o problema da falta de segurança pública ainda se faz presente no estado, visto o alto índice de dependência espacial dos crimes de artigos 121, 155 e 157 do código penal.
  
